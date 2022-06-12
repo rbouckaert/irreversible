@@ -39,6 +39,14 @@ sites   sites   count           =log2(patterns)
 25		94		2138834994142	41.0
 26		98		6944753544643	42.7
 27		102		22549473023585	44.4
+
+
+431
+4581
+48337
+510697
+5394649
+
  */
 
 
@@ -115,7 +123,7 @@ public class HyperCascadeCounter extends Runnable {
 			int offset = layerOffset[layer];
 			int parentOffset = layerOffset[layer-1];
 			for (int i = 0; i < layerSize; i++) {
-				if (mem[parentOffset + i] == 1 &&  mem[parentOffset + i + 1] == 1) {
+				if (mem[parentOffset + i] == 1 ||  mem[parentOffset + i + 1] == 1) {
 					mutateMap[m] = i;
 					m++;
 				}
@@ -157,7 +165,7 @@ public class HyperCascadeCounter extends Runnable {
 		StringBuilder b = new StringBuilder();
 		for (int i = 0; i < buf.length; i++) {
 			if (i == layerOffset[j]) {
-				b.append(' ');
+				b.append('_');
 				j++;
 			}
 			b.append(buf[i] + "");
