@@ -1,11 +1,12 @@
 package irreversible.util;
 
-import java.util.Arrays;
+import java.util.*;
 
 import beast.app.util.Application;
 import beast.core.Description;
 import beast.core.Input;
 import beast.core.Runnable;
+import beast.core.util.Log;
 
 
 /*
@@ -30,8 +31,8 @@ sites   sites   count           =log2(patterns)
 17		62		173118414		27.4
 18		66		562110290		29.1
 19		70		1825158051		30.8
-20		74		5926246929		32.5
-21		78		19242396629		34.2
+20		74		5926246929		32.5 verified up to here
+21		78		19242396629		34.2 interpolated from here on
 22		82		62479659622		35.9
 23		86		202870165265	37.6
 24		90		658715265222	39.3
@@ -45,19 +46,28 @@ sites   sites   count           =log2(patterns)
 public class HyperCascadeCounter extends Runnable {
 	public Input<Integer> layersInput = new Input<>("layers", "number of layers in system", 4);
 	public Input<Integer> sitesInput = new Input<>("sites", "number of sites of biggest (first) layer in system", 4);
+	public Input<Boolean> verboseInput = new Input<>("verbose", "print out all states visited", false);
 
 	int layers, sites;
 	// start position of layers in memory
 	int [] layerOffset;
-	
+	int [][] mutateMap;
+	List<String> states;
+	boolean verbose;
+
 	@Override
 	public void initAndValidate() {
 	}
 
 	@Override
 	public void run() throws Exception {
+		long start = System.currentTimeMillis();
 		layers = layersInput.get();
 		sites = sitesInput.get();
+		mutateMap = new int[layers][sites];
+		states = new ArrayList<>();
+		verbose = verboseInput.get();
+		
 		if (layers > sites) {
 			throw new IllegalArgumentException("nuber of layers (" + layers + ") should not be "
 					+ "larger than number of sites (" + sites + ")");
@@ -65,7 +75,7 @@ public class HyperCascadeCounter extends Runnable {
 
 		// calc total number of sites in system
 		int totalSites = 0;
-		layerOffset = new int[layers];
+		layerOffset = new int[layers + 1];
 		for (int i = 0; i < layers; i++) {
 			layerOffset[i] = totalSites;
 			totalSites += sites - i;
@@ -73,9 +83,17 @@ public class HyperCascadeCounter extends Runnable {
 
 		int [] mem = new int[totalSites]; 
 		long states = countStates(mem, 0);
+		
+		if (verbose) {
+			for (String s : this.states) {
+				Log.warning(s);
+			}
+		}
 		System.out.println("#states = " + states +
 				" #bits = "  + (Math.log(states)/Math.log(2)) +
 				" #sites = " + totalSites);
+		long end = System.currentTimeMillis();
+		Log.warning("Done in " + ((end - start)/1000) + " seconds");
 	}
 
 	private long countStates(int[] mem, int layer) {
@@ -87,18 +105,17 @@ public class HyperCascadeCounter extends Runnable {
 			for (int i = 0; i < n; i++) {
 				Arrays.fill(mem, 0);
 				toBinary(i, mem, layerSize);
-				count += countStates(mem, 1) + 1;
-				// print(mem);
+				count++;
+				if (verbose) print(mem);
+				count += countStates(mem, 1);
 			}
 		} else {
-			boolean [] canMutate = new boolean[layerSize];
-			int [] mutateMap = new int[layerSize];
+			int [] mutateMap = this.mutateMap[layer];
 			int m = 0;
 			int offset = layerOffset[layer];
 			int parentOffset = layerOffset[layer-1];
 			for (int i = 0; i < layerSize; i++) {
 				if (mem[parentOffset + i] == 1 &&  mem[parentOffset + i + 1] == 1) {
-					canMutate[i] = true;
 					mutateMap[m] = i;
 					m++;
 				}
@@ -120,12 +137,15 @@ public class HyperCascadeCounter extends Runnable {
 					mem[offset + mutateMap[j]] = buf[j];
 				}
 				count++;
+				if (verbose) print(mem);
 				if (layer +1 < layers) {
 					count += countStates(mem, layer + 1);
 				}
-				// print(mem);
 			}
 
+			for (int i = offset; i < mem.length; i++) {
+				mem[i] = 0;
+			}
  		}		
 		
 		return count;
@@ -133,11 +153,18 @@ public class HyperCascadeCounter extends Runnable {
 	
 	
 	private void print(int[] buf) {
+		int j = 1;
+		StringBuilder b = new StringBuilder();
 		for (int i = 0; i < buf.length; i++) {
-			System.err.print(buf[i]);
+			if (i == layerOffset[j]) {
+				b.append(' ');
+				j++;
+			}
+			b.append(buf[i] + "");
 		}
-		System.err.println();
 		
+		// System.err.println(b);
+		states.add(b.toString());
 	}
 
 	/**
@@ -154,9 +181,23 @@ public class HyperCascadeCounter extends Runnable {
         };
     }
 
+	public static List<String> getStates(Integer n) {
+		HyperCascadeCounter h = new HyperCascadeCounter();
+		h.initByName("layers", n, "sites", n, "verbose", true);
+		try {
+			h.run();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return h.states;
+	}
+
+	
 	public static void main(String[] args) throws Exception {
 		new Application(new  HyperCascadeCounter(), "Hyper Cascade Counter", args);
 
 	}
+
 
 }
