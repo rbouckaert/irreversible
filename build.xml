@@ -84,13 +84,16 @@
 		<mkdir dir="${buildIrreversible}" />
 
 		<!-- Compile the java code from ${srcIrreversible} into ${buildIrreversible} /bin -->
-		<javac target="1.8" srcdir="${srcIrreversible}" destdir="${buildIrreversible}" classpathref="classpath" 
+		<javac source="1.8" target="1.8" srcdir="${srcIrreversible}" destdir="${buildIrreversible}" classpathref="classpath" 
 		       fork="true"
 		       memoryinitialsize="256m"
 		       memorymaximumsize="256m">
+			<include name="irreversible/**/**" />
 			<include name="beast/**/**" />
 			<!-- compile JUnit test classes -->
-			<include name="test/beast/**" />
+			<!--
+			<include name="test/**" />
+			-->
 		</javac>
 		<echo message="Successfully compiled." />
 	</target>
