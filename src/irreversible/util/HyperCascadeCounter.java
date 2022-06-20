@@ -178,7 +178,7 @@ public class HyperCascadeCounter extends Runnable {
 	/**
      * Convert the integer to an unsigned number.
      */
-    private void toBinary(int val, int[] buf, int len) {
+    public static void toBinary(int val, int[] buf, int len) {
         // assert shift > 0 && shift <=5 : "Illegal shift value";
         int mag = Integer.SIZE - Integer.numberOfLeadingZeros(val);
 

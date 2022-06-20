@@ -1,5 +1,7 @@
 package irreversible.substmodel;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import beast.core.Description;
@@ -16,9 +18,9 @@ public class HyperCascadeDataType extends DataType.Base {
     
     @Override
     public void initAndValidate() {
-    	List<String> states = HyperCascadeCounter.getStates(layersInput.get());
-    	
-        stateCount = states.size();
+    	List<String> states = getStates(layersInput.get());
+
+    	stateCount = states.size();
         codeLength = states.get(0).length();
 
 		codeMap = "";
@@ -40,7 +42,34 @@ public class HyperCascadeDataType extends DataType.Base {
 		}
     }
 
-    @Override
+    private List<String> getStates(Integer layerCount) {
+    	// determine number of states;
+    	int layerSize = 0;
+    	for (int i = 0; i < layerCount; i++) {
+    		layerSize += layerCount-i;
+    	}
+    	int [] mem = new int[layerSize];
+    	int n = 1 << layerSize;
+    	
+    	// list all states
+    	List<String> states = new ArrayList<>();
+		for (int i = 0; i < n; i++) {
+			Arrays.fill(mem, 0);
+			HyperCascadeCounter.toBinary(i, mem, layerSize);
+			StringBuilder b = new StringBuilder();
+			for (int j = 0; j < layerSize; j++) {
+				if (mem[j] == 0) {
+					b.append('0');
+ 				} else {
+ 					b.append('1');
+ 				}
+			}
+			states.add(b.toString());
+		}
+		return states;
+	}
+
+	@Override
 	public String getCharacter(int code) {
         if (codeLength > 0) {
         	return codeMap.substring(code * codeLength, (code + 1) * codeLength);
