@@ -14,6 +14,8 @@ import irreversible.util.HyperCascadeCounter;
 public class HyperCascadeDataType extends DataType.Base {
 	public Input<Integer> layersInput = new Input<>("layers", "number of layers in system", 4);
 
+	private double [][]ambiguousPartials;
+	
     public HyperCascadeDataType() {} // default c'tor
     
     @Override
@@ -48,8 +50,10 @@ public class HyperCascadeDataType extends DataType.Base {
     	for (int i = 0; i < layerCount; i++) {
     		layerSize += layerCount-i;
     	}
+    	
     	int [] mem = new int[layerSize];
     	int n = 1 << layerSize;
+    	
     	
     	// list all states
     	List<String> states = new ArrayList<>();
@@ -87,5 +91,50 @@ public class HyperCascadeDataType extends DataType.Base {
 	@Override
 	public String getTypeDescription() {
 		return "HyperCascadeData";
+	}
+
+	public double[] getAmbiguousPartials(int state) {
+		if (ambiguousPartials == null) {
+			initAmbiguousPartials();
+		}
+		return ambiguousPartials[state];
 	}	
+	
+	
+	private void initAmbiguousPartials() {
+		int stateCount = getStateCount();
+		ambiguousPartials = new double[stateCount][stateCount];
+		
+		String [] code = new String[stateCount];
+		for (int i = 0; i < stateCount; i++) {
+			code[i] = getCharacter(i);
+		}
+		
+		boolean [] isFirstInLayer = new boolean[code[0].length()];
+		int layers = layersInput.get();
+		int k = 0;
+		for (int i = 0; i < layers; i++) {
+			isFirstInLayer[k] = true;
+			k+=layers-i;
+		}
+		
+		for (int i = 0; i < stateCount; i++) {
+			for (int j = 0; j < stateCount; j++) {
+				if (isCompatible(code[i], code[j], isFirstInLayer)) {
+					ambiguousPartials[i][j] = 1.0;
+				}
+			}
+		}
+	}
+
+	private boolean isCompatible(String state1, String state2, boolean [] isFirstInLayer) {
+		for (int i = 0; i < state1.length(); i++) {
+			if (!(isFirstInLayer[i] || state1.charAt(i) == state2.charAt(i))) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+
 }

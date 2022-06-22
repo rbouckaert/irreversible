@@ -17,12 +17,21 @@ public class ConditionedOnDistribution extends Distribution {
 	
 	@Override
 	public double calculateLogP() {		
-		return distrXYInput.get().calculateLogP() - distrYInput.get().calculateLogP();
+		final double logPXY = distrXYInput.get().calculateLogP();
+		final double logPY  = distrYInput.get().calculateLogP();
+		final double logP = logPXY - logPY;
+		if (Double.isNaN(logP)) {
+//			System.err.println(logPXY + " - " + logPY);
+			return Double.NEGATIVE_INFINITY;
+		}
+		return logP;
 	}
 	
 	@Override
 	public double getCurrentLogP() {
-		return distrXYInput.get().getCurrentLogP() - distrYInput.get().getCurrentLogP();
+		final double logPXY = distrXYInput.get().getCurrentLogP();
+		final double logPY  = distrYInput.get().getCurrentLogP();
+		return logPXY - logPY;
 	}
 	
 	

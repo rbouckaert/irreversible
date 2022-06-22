@@ -11,8 +11,11 @@ import beast.evolution.alignment.Alignment;
 @Description("Class representing hyper cascade alignment data")
 public class HyperCascadeAlignment extends Alignment {
     final public Input<Alignment> alignmentInput = new Input<>("data", "alignment to be filtered", Validate.REQUIRED);
+    final public Input<Integer> offsetInput = new Input<>("offset", "offset of the alignment to be filtered = number of "
+    		+ "sites at start and end to be removed. By default, all sites will be included.", 0);
+	public Input<Boolean> addAmbiguitiesInput = new Input<>("addAmbiguities", "assume first entry in each layer is "
+			+ "ambiguous. This can be useful for conditioning on.", false);
 
-	
 	@Override
 	public void initAndValidate() {
         Alignment data = alignmentInput.get();
@@ -32,6 +35,8 @@ public class HyperCascadeAlignment extends Alignment {
         }
         firstLayerSiteCount /= layerCount;
         
+        int offset = offsetInput.get();
+        firstLayerSiteCount -= 2 * offset;
         
         stateCounts = new ArrayList<>();
         maxStateCount = m_dataType.getStateCount();
@@ -52,9 +57,9 @@ public class HyperCascadeAlignment extends Alignment {
 
 		sitePatterns = new int[firstLayerSiteCount- layerCount + 1][taxonCount];
 		for (int j = 0; j < taxonCount; j++) {
-			List<Integer> states = calcSiteValue(firstLayerSiteCount, j, layerCount, data);
+			List<Integer> states = calcSiteValue(firstLayerSiteCount + 2 * offset, j, layerCount, data);
 			for (int i = 0; i < firstLayerSiteCount - layerCount + 1; i++) {
-				sitePatterns[i][j] = states.get(i);
+				sitePatterns[i][j] = states.get(i + offset);
 			}
 		}
         // calcPatterns();
@@ -76,7 +81,7 @@ public class HyperCascadeAlignment extends Alignment {
 					}						
 				}
 				if (j<layerCount-1) {
-					b.append('_');
+					// b.append('_');
 					offset += siteCount - j;
 				}
 			}
@@ -87,6 +92,16 @@ public class HyperCascadeAlignment extends Alignment {
 	
 	
 	
-	
-	
+	@Override
+	public double[] getTipLikelihoods(int taxonIndex, int patternIndex_) {
+    	int state = getPattern(taxonIndex, patternIndex_);
+    	int stateCount = m_dataType.getStateCount();
+		if (addAmbiguitiesInput.get()) {
+			return ((HyperCascadeDataType)m_dataType).getAmbiguousPartials(state);
+		} else {
+	         double [] partials = new double[stateCount];
+	         partials[state] = 1;
+	         return partials;
+		}
+	}
 }

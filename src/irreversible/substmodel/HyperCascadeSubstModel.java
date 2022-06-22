@@ -3,12 +3,17 @@ package irreversible.substmodel;
 import java.util.ArrayList;
 import java.util.List;
 
+import beast.core.Description;
 import beast.core.Input;
 import beast.core.Input.Validate;
 import beast.core.parameter.RealParameter;
 import beast.evolution.datatype.DataType;
+import beast.evolution.substitutionmodel.ComplexColtEigenSystem;
 import beast.evolution.substitutionmodel.ComplexSubstitutionModel;
+import beast.evolution.substitutionmodel.EigenSystem;
+import beast.math.matrixalgebra.RobustSingularValueDecomposition;
 
+@Description("Subst model for hyper cascade data.")
 public class HyperCascadeSubstModel extends ComplexSubstitutionModel {
     final public Input<RealParameter> AGRateInput = new Input<RealParameter>("AGRate", "the rate of mutating "
     		+ "dimension 1 from GG-A to GG-G, "
@@ -23,8 +28,11 @@ public class HyperCascadeSubstModel extends ComplexSubstitutionModel {
     // rates[][0] = from state index
     // rates[][1] = to state index
     // rates[][2] = rate index = number of incompatible parents
+    // rates[][3] = layer
     private int [][] rates;
 
+    private double [] layerFactor;
+    
     public HyperCascadeSubstModel() {
         ratesInput.setRule(Validate.OPTIONAL);
         frequenciesInput.setRule(Validate.FORBIDDEN);
@@ -56,6 +64,15 @@ public class HyperCascadeSubstModel extends ComplexSubstitutionModel {
         unnormalizedQ = new double[nrOfStates][nrOfStates];
         storedUnnormalizedQ = new double[nrOfStates][nrOfStates];
         initRateIndices(dataType);
+        
+        // the layerfactor multiplies rates with layers
+        // this introduces some differences in outgoing rates
+        // which helps with numerical stability of the Eigen decomposition        
+        layerFactor = new double[dataType.layersInput.get()];
+        layerFactor[0] = 1.0;
+        for (int i = 1; i < layerFactor.length; i++) {
+        	layerFactor[i] = 0.99 * layerFactor[i-1];
+        }
     }
 	
 
@@ -70,22 +87,24 @@ public class HyperCascadeSubstModel extends ComplexSubstitutionModel {
     		for (int j = 0; j < nrOfStates; j++) {
     			int rateID = isCompatible(states, i, j);
     			if (rateID >= 0) {
-    				compatiblePairs.add(new int[] {i, j, rateID});
+    				compatiblePairs.add(new int[] {i, j, rateID, layer});
     			}
     		}
     	}
     	
-    	rates = new int[compatiblePairs.size()][3];
+    	rates = new int[compatiblePairs.size()][4];
     	for (int i = 0; i < rates.length; i++) {
     		rates[i][0] = compatiblePairs.get(i)[0];
     		rates[i][1] = compatiblePairs.get(i)[1];
     		rates[i][2] = compatiblePairs.get(i)[2];
+    		rates[i][3] = compatiblePairs.get(i)[3];
     	}
 	}
 
     // two states are compatible if 
     // 1. the states differ by only a single 1
     // 2. both parent states are 1 
+    private int layer = -1;
 	private int isCompatible(List<String> states, int i, int j) {
 		if (i == j) {
 			return -1;
@@ -96,7 +115,8 @@ public class HyperCascadeSubstModel extends ComplexSubstitutionModel {
 		
 		int layerCount = dataTypeInput.get().layersInput.get();
 		int k = 0;
-		int position = -1, layer = -1;
+		int position = -1;
+		layer = -1;
 		for (int r = 0; r < layerCount; r++) {
 			for (int s = 0; s < layerCount-r; s++) {
 				char c1 = state1.charAt(k);
@@ -120,8 +140,11 @@ public class HyperCascadeSubstModel extends ComplexSubstitutionModel {
 			}
 		}
 
-		String state1_ = state1.replaceAll("([01][01][01])([01][01])([01])", "$1\\\\n$2\\\\n$3");
-		String state2_ = state2.replaceAll("([01][01][01])([01][01])([01])", "$1\\\\n$2\\\\n$3");
+		String state1_ = layerCount == 3 ? state1.replaceAll("([01][01][01])([01][01])([01])", "$1\\\\n$2\\\\n$3") :
+			state1.replaceAll("([01][01][01][01])([01][01][01])([01][01])([01])", "$1\\\\n$2\\\\n$3\\\\n$4")
+			;
+		String state2_ = layerCount == 3 ? state2.replaceAll("([01][01][01])([01][01])([01])", "$1\\\\n$2\\\\n$3"): 
+				state2.replaceAll("([01][01][01][01])([01][01][01])([01][01])([01])", "$1\\\\n$2\\\\n$3\\\\n$4");
 		
 		System.out.print("\"" + state1_ + "\" -> \"" + state2_ +"\"");
 		if (layer == 0) {
@@ -143,7 +166,6 @@ public class HyperCascadeSubstModel extends ComplexSubstitutionModel {
 		System.out.print("[color=\"grey\"];\n");
 		return 2;
 	}
-
 
 
 	@Override
@@ -173,7 +195,7 @@ public class HyperCascadeSubstModel extends ComplexSubstitutionModel {
 
     @Override
     public double[] getFrequencies() {
-        double[] fFreqs = new double[4];
+        double[] fFreqs = new double[nrOfStates];
         fFreqs[0] = 1;
         return fFreqs;
     }
@@ -181,7 +203,7 @@ public class HyperCascadeSubstModel extends ComplexSubstitutionModel {
     protected void setupUnnormalizedQMatrix() {
     	Double [] r = AGRate.getValues();
     	for (int i = 0; i < rates.length; i++) {
-	        unnormalizedQ[rates[i][0]][rates[i][1]] = r[rates[i][2]];
+	        unnormalizedQ[rates[i][0]][rates[i][1]] = r[rates[i][2]] * layerFactor[rates[i][3]];
     	}
 	        
     }
@@ -190,12 +212,10 @@ public class HyperCascadeSubstModel extends ComplexSubstitutionModel {
 	public boolean canHandleDataType(DataType dataType) {
 	       return dataType instanceof HyperCascadeDataType;
 	}
-	
-	
-	
+		
 	public static void main(String[] args) {
 		HyperCascadeDataType h = new HyperCascadeDataType();
-		h.initByName("layers", 3);
+		h.initByName("layers", 4);
 		
 		
 		HyperCascadeSubstModel subst = new HyperCascadeSubstModel();

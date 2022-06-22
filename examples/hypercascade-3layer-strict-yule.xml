@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><beast beautitemplate='Standard' beautistatus='' namespace="beast.core:beast.evolution.alignment:beast.evolution.tree.coalescent:beast.core.util:beast.evolution.nuc:beast.evolution.operators:beast.evolution.sitemodel:beast.evolution.substitutionmodel:beast.evolution.likelihood" required="" version="2.6">
+    <data
+id="hypercascade_hiPSC_barcs_subset"
+spec="Alignment"
+name="alignment">
+        <sequence id="seq_110" spec="Sequence"  taxon="1" totalcount="4" value="GGGAGGGGGGGAAAAAAGAGGAGAAAGGGGAAAAAAAGAAAAAGAGGAAAAAAAAAAAAAGAAAAAAAAA"/>
+        <sequence id="seq_101" spec="Sequence" taxon="10" totalcount="4" value="GGGGGGGGGGAGAAGGGGGAGGAAAGAAAAAAAAAAAGAAAAGAAAAAAAAAAGAAAAAAAAAAAAAAAA"/>
+        <sequence id="seq_111" spec="Sequence" taxon="11" totalcount="4" value="GGGGGGGGGGGGGGGGGGGGGAGAAGAAGAAGAAAGGGAAAAAAAAAAAAAAAGAAAAAAAAAAAAAAAA"/>
+        <sequence id="seq_121" spec="Sequence" taxon="12" totalcount="4" value="GGGGGGGGGGGGGGGGGGGGGAGAAAGGAGAAAAGGGGAAAAAGGGGAGGAAGGAAAAAAGAAAAAAAAG"/>
+        <sequence id="seq_131" spec="Sequence" taxon="13" totalcount="4" value="GGGGGGGGGGGGGGGGGGGAGAGAAAGGGGGGGAGGGAAAAAAGGGGAAGAAGGAAAAAAGAAAAAAAGG"/>
+        <sequence id="seq_141" spec="Sequence" taxon="14" totalcount="4" value="GGGGGGGGGGAAAAAGAAGGGAGAAAGGGAAAAAAAAGAAAAAGGGAAAAAAAAAAAAAAGAAAAAAAAA"/>
+        <sequence id="seq_151" spec="Sequence" taxon="15" totalcount="4" value="GGGGGGGGGGGGGGGGGGGGGAGAAAGGAAAGGAGGGGAAAAAGGGAAGGAAGGAAAAAAGAAAAAAAGG"/>
+        <sequence id="seq_161" spec="Sequence" taxon="16" totalcount="4" value="GGGGGGGGGGGGGGGGGGGAGGAAAGGAGAAGAAAGGGAAGAGAAAAAAAAAAGAAAAAAAAAAAAAAAA"/>
+        <sequence id="seq_171" spec="Sequence" taxon="17" totalcount="4" value="GGGGAGGGGGGGGGGGGGGAGGAAAGAAGAAGAAAGGGAAAAGAAAAAAAAAAGAAAAAAAAAAAAAAAA"/>
+        <sequence id="seq_181" spec="Sequence" taxon="18" totalcount="4" value="GGGGGGGGGGGGGGGGGGGGGAGAAAGGGGGAGAGGGGAAAAAGGGGAAGAAGGAAAAAAGAAAAAGAAG"/>
+        <sequence id="seq_191" spec="Sequence" taxon="19" totalcount="4" value="GGGGGGGGGGGGGGGGGGAGGAGAAAGGGAAAAAAGGGAAAAAGGGAAAAAAGGAAAAAAGAAAAAAAAA"/>
+        <sequence id="seq_210" spec="Sequence"  taxon="2" totalcount="4" value="GGGGGGGGGGGGGGGGGGGGGAGGAAGGGGAAAAAGGGAAAAAGGGGAGAAAGGAAAAAAGAAAAAAAGA"/>
+        <sequence id="seq_201" spec="Sequence" taxon="20" totalcount="4" value="GGGGGGGGGGGAGGGGGGGAGGAAAGAAAAAAAAAAGGAAAAGAAAAAAAAAAGAAAAAAAAAAAAAAAA"/>
+        <sequence id="seq_211" spec="Sequence" taxon="21" totalcount="4" value="GGGGGGGGGGAGAGGAGGGGGAGAAAGGGGAAAAAGGGAAAAAGGGAAAAAAGAAAAAAAGAAAAAAAAA"/>
+        <sequence id="seq_221" spec="Sequence" taxon="22" totalcount="4" value="GGGGGGGGGAAGAGGGGGGAGGAAAGAAAAAAAAAAGGAAAAGAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+        <sequence id="seq_231" spec="Sequence" taxon="23" totalcount="4" value="GGGGGGGGGGGGGGGGGGGAGGGAAAGGGGAAAGGGGGAAAAAAAGAAAAAAGGAAAAAAAGAAAAAAGG"/>
+        <sequence id="seq_241" spec="Sequence" taxon="24" totalcount="4" value="GGGGGGGGGGGGGGGGGGGGGAGAAAGGAGAAAAGGGGAAAAAGGGGAAGAAGGAAAAAAGAAAAAAAAG"/>
+        <sequence id="seq_251" spec="Sequence" taxon="25" totalcount="4" value="GGGGGGGGGGGGGGGGGGGGGAGAAAGGGGGAAAGGGGAAAAAGGGAAAGAAGGAAAAAAGAAAAAAAGG"/>
+        <sequence id="seq_261" spec="Sequence" taxon="26" totalcount="4" value="GGGGGGGGGGGGGGGGGGGGGAGAAAGGAGAGGAGGGGAAAAAGGGAAAAAAGGAAAAAAGAAAAAAAAG"/>
+        <sequence id="seq_271" spec="Sequence" taxon="27" totalcount="4" value="GGGGGGGGGGGGGGGGGGGAGGAAAGAAAAAGAAAGGGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+        <sequence id="seq_281" spec="Sequence" taxon="28" totalcount="4" value="GGGGGGGGGGGGGGGGGGGAGGAAAGAAGAAAAAAAGGAAAAGAAAAAAGAAAGAAAAAAAAAAAAGAAA"/>
+        <sequence id="seq_291" spec="Sequence" taxon="29" totalcount="4" value="GGGGGGGGGGGGGGGGGGGAGGAAAGAAGAAAAAAGGGAAAAGAAAAAAAAAAGAAAAAAAAAAAGAAAA"/>
+        <sequence id="seq_35" spec="Sequence"   taxon="3" totalcount="4" value="GGGGGGGGGGGGGGGGGGGGGAGAAAGGGGAAAAGGGGAAAAAGGGGAAAGGGGAAAAAAGAAAAAAAAA"/>
+        <sequence id="seq_301" spec="Sequence" taxon="30" totalcount="4" value="GGGGAGGGAAGGGGGGGGGGAAAAAAAAAAAAAAAGGGAAAAAGGAAAGAAAGGAAAAAAGAAAAAAAGG"/>
+        <sequence id="seq_41" spec="Sequence"   taxon="4" totalcount="4" value="GGGGGGGGGGAGGGGGGGGGGAGAAAGGAGGAAAAGGGAAAAAGGGAAGAAAGGAAAAAAGAAAAAAAGG"/>
+        <sequence id="seq_51" spec="Sequence"   taxon="5" totalcount="4" value="GGGGAGGGGGGAGGGGGGGGGAGAAAGGGAAGAAAGGGAAAAAGGGGAAGAAGGAAAAAAGAAAAAAAGG"/>
+        <sequence id="seq_61" spec="Sequence"   taxon="6" totalcount="4" value="GGGGGGGGGGGGGGGGGGGGGAGAAAGGGAAAAAGGGGAAAAAGGGGAAGAAGGAAAAAAGAAAAAAAAG"/>
+        <sequence id="seq_71" spec="Sequence"   taxon="7" totalcount="4" value="GGGGGGGGGGGGAGGAGGGGGAGAAAGGAAAAAAGGGGAAAAAGAGAAGAAAGGAAAAAAGAAAAAAAAA"/>
+        <sequence id="seq_81" spec="Sequence"   taxon="8" totalcount="4" value="GGGGGGGGGGGGGGGGGGGGGAGAAAGGGAAAAAAAAGAAAAAGGGAAAAAAGAAAAAAAGAAAAAAAGA"/>
+        <sequence id="seq_91" spec="Sequence"   taxon="9" totalcount="4" value="GGGGGGGGGGGGGGGGGGGAGGAAAAAAAAAAAAAAAGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+    </data>
+
+    <data id="hypercascade_3layer" spec="irreversible.substmodel.HyperCascadeAlignment"
+    	data="@hypercascade_hiPSC_barcs_subset">
+    	<userDataType id="HyperCascadeDataType" spec="irreversible.substmodel.HyperCascadeDataType" layers="3"/>
+    </data>
+
+    <data id="hypercascade_2layer" spec="irreversible.substmodel.HyperCascadeAlignment"
+    	data="@hypercascade_hiPSC_barcs_subset" 
+    	offset="1"
+    	addAmbiguities="true">
+    	<userDataType id="HyperCascadeDataType2" spec="irreversible.substmodel.HyperCascadeDataType" layers="3"/>
+    </data>
+
+    <map name="Uniform" >beast.math.distributions.Uniform</map>
+    <map name="Exponential" >beast.math.distributions.Exponential</map>
+    <map name="LogNormal" >beast.math.distributions.LogNormalDistributionModel</map>
+    <map name="Normal" >beast.math.distributions.Normal</map>
+    <map name="Beta" >beast.math.distributions.Beta</map>
+    <map name="Gamma" >beast.math.distributions.Gamma</map>
+    <map name="LaplaceDistribution" >beast.math.distributions.LaplaceDistribution</map>
+    <map name="prior" >beast.math.distributions.Prior</map>
+    <map name="InverseGamma" >beast.math.distributions.InverseGamma</map>
+    <map name="OneOnX" >beast.math.distributions.OneOnX</map>
+    
+    
+              <distribution id="jointTreeLikelihood" spec="irreversible.substmodel.ConditionedOnDistribution">
+                 <distrY id="treeLikelihood.Y" spec="TreeLikelihood" data="@hypercascade_2layer" tree="@Tree.t:big2_barcs" useAmbiguities="true">
+                    <siteModel id="SiteModel.s:Y" spec="SiteModel" gammaCategoryCount="1" shape="@gammaShape.s:big2_barcs">
+                        <mutationRate idref="mutationRate.s:big2_barcs"/>
+                        <proportionInvariant idref="proportionInvariant.s:big2_barcs"/>
+                        <substModel id="hky.s:Y" spec="irreversible.substmodel.HyperCascadeSubstModel" 
+                        	dataType="@HyperCascadeDataType2"
+                        	AGRate="@AGRate">
+                        </substModel>
+                    </siteModel>
+                    <branchRateModel idref="StrictClock.c:big2_barcs"/>
+                </distrY>
+
+                <distrXY id="treeLikelihood.XY" spec="TreeLikelihood" data="@hypercascade_3layer" tree="@Tree.t:big2_barcs"
+                	scaling="always">
+                    <siteModel id="SiteModel.s:big2_barcs" spec="SiteModel" gammaCategoryCount="1" shape="@gammaShape.s:big2_barcs">
+                        <parameter id="mutationRate.s:big2_barcs" spec="parameter.RealParameter" estimate="false" name="mutationRate">1.0</parameter>
+                        <parameter id="proportionInvariant.s:big2_barcs" spec="parameter.RealParameter" estimate="false" lower="0.0" name="proportionInvariant" upper="1.0">0.0</parameter>
+                        <substModel id="hky.s:big2_barcs" spec="irreversible.substmodel.HyperCascadeSubstModel" 
+                        	dataType="@HyperCascadeDataType"
+                        	AGRate="@AGRate">
+                        </substModel>
+                    </siteModel>
+                    <branchRateModel id="StrictClock.c:big2_barcs" spec="beast.evolution.branchratemodel.StrictClockModel">
+                        <parameter id="clockRate.c:big2_barcs" spec="parameter.RealParameter" estimate="false" name="clock.rate">1.0</parameter>
+                    </branchRateModel>
+                </distrXY>
+                
+	          </distribution>
+    
+    
+    <run id="mcmc" spec="MCMC" chainLength="1000000" numInitializationAttempts="1000">
+        <state id="state" spec="State" storeEvery="5000">
+            <tree id="Tree.t:big2_barcs" spec="beast.evolution.tree.Tree" name="stateNode">
+                <taxonset id="TaxonSet.big2_barcs" spec="TaxonSet">
+                    <alignment idref="hypercascade_hiPSC_barcs_subset"/>
+                </taxonset>
+            </tree>
+            <parameter id="birthRate.t:big2_barcs" spec="parameter.RealParameter" name="stateNode">1.0</parameter>
+            <parameter id="AGRate" spec="parameter.RealParameter" dimension="3" lower="0.05" name="stateNode">1.8 1.0 0.2</parameter>
+            <parameter id="gammaShape.s:big2_barcs" spec="parameter.RealParameter" name="stateNode" lower="0.1">1.0</parameter>
+        </state>
+
+        <init id="RandomTree.t:big2_barcs" spec="beast.evolution.tree.RandomTree" estimate="false" initial="@Tree.t:big2_barcs" taxa="@hypercascade_hiPSC_barcs_subset"
+            rootHeight="0.5">
+            <populationModel id="ConstantPopulation0.t:big2_barcs" spec="ConstantPopulation">
+                <parameter id="randomPopSize.t:big2_barcs" spec="parameter.RealParameter" name="popSize">1</parameter>
+            </populationModel>
+        </init>
+
+<!--        
+        <init id="ClusterTree.t:big2_barcs" spec="beast.util.ClusterTree" estimate="false" initial="@Tree.t:big2_barcs" 
+        	taxa="@hypercascade_hiPSC_barcs_subset"/>
+-->
+        
+        <distribution id="posterior" spec="util.CompoundDistribution">
+            <distribution id="prior" spec="util.CompoundDistribution">
+                <distribution id="YuleModel.t:big2_barcs" spec="beast.evolution.speciation.YuleModel" birthDiffRate="@birthRate.t:big2_barcs" tree="@Tree.t:big2_barcs"/>
+                <prior id="YuleBirthRatePrior.t:big2_barcs" name="distribution" x="@birthRate.t:big2_barcs">
+                    <Gamma id="Gamma.2" name="distr">
+                        <parameter id="RealParameter.9" spec="parameter.RealParameter" estimate="false" name="alpha">2.0</parameter>
+                        <parameter id="RealParameter.10" spec="parameter.RealParameter" estimate="false" name="beta">1.0</parameter>
+                    </Gamma>
+                </prior>
+                <prior id="GammaShapePrior.s:big2_barcs" name="distribution" x="@gammaShape.s:big2_barcs">
+                    <Exponential id="Exponential.0" name="distr">
+                        <parameter id="RealParameter.0" spec="parameter.RealParameter" estimate="false" name="mean">1.0</parameter>
+                    </Exponential>
+                </prior>
+                <prior id="AGRate.s:big2_barcs" name="distribution" x="@AGRate">
+                    <LogNormal id="LogNormalDistributionModel.1" name="distr">
+                        <parameter id="RealParameter.7" spec="parameter.RealParameter" estimate="false" name="M">1.0</parameter>
+                        <parameter id="RealParameter.8" spec="parameter.RealParameter" estimate="false" name="S">1.25</parameter>
+                    </LogNormal>
+                </prior>
+            </distribution>
+            <distribution id="likelihood" spec="util.CompoundDistribution">
+	            <!--
+                <distribution idref="treeLikelihood.XY"/>
+                -->
+                <distribution idref="jointTreeLikelihood"/>
+                
+            </distribution>
+        </distribution>
+        
+        <operator id="YuleBirthRateScaler.t:big2_barcs" spec="ScaleOperator" parameter="@birthRate.t:big2_barcs" weight="3.0"/>
+        <operator id="YuleModelTreeScaler.t:big2_barcs" spec="ScaleOperator" scaleFactor="0.5" tree="@Tree.t:big2_barcs" weight="3.0"/>
+        <operator id="YuleModelTreeRootScaler.t:big2_barcs" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@Tree.t:big2_barcs" weight="3.0"/>
+        <operator id="YuleModelUniformOperator.t:big2_barcs" spec="Uniform" tree="@Tree.t:big2_barcs" weight="30.0"/>
+        <operator id="YuleModelSubtreeSlide.t:big2_barcs" spec="SubtreeSlide" tree="@Tree.t:big2_barcs" weight="15.0"/>
+        <operator id="YuleModelNarrow.t:big2_barcs" spec="Exchange" tree="@Tree.t:big2_barcs" weight="0.0"/>
+        <operator id="YuleModelWide.t:big2_barcs" spec="Exchange" isNarrow="false" tree="@Tree.t:big2_barcs" weight="3.0"/>
+        <operator id="YuleModelWilsonBalding.t:big2_barcs" spec="WilsonBalding" tree="@Tree.t:big2_barcs" weight="3.0"/>
+
+        <operator id="gammaShapeScaler.s:big2_barcs" spec="ScaleOperator" parameter="@gammaShape.s:big2_barcs" scaleFactor="0.5" weight="0.1"/>
+
+        <operator id="AGRateExchanger.s:big2_barcs" spec="DeltaExchangeOperator" delta="0.01" weight="0.3">
+            <parameter idref="AGRate"/>
+        </operator>
+
+        <logger id="tracelog" spec="Logger" fileName="$(filebase).log" logEvery="1000" model="@posterior" sanitiseHeaders="true" sort="smart">
+            <log idref="posterior"/>
+            <log idref="likelihood"/>
+            <log idref="prior"/>
+            <log idref="treeLikelihood.XY"/>
+            <log idref="treeLikelihood.Y"/>
+            <log id="TreeHeight.t:big2_barcs" spec="beast.evolution.tree.TreeHeightLogger" tree="@Tree.t:big2_barcs"/>
+            <log idref="YuleModel.t:big2_barcs"/>
+            <log idref="birthRate.t:big2_barcs"/>
+            <log idref="AGRate"/>
+            <log idref="gammaShape.s:big2_barcs"/>
+        </logger>
+        
+        <logger id="screenlog" spec="Logger" logEvery="1000">
+            <log idref="posterior"/>
+            <log idref="likelihood"/>
+            <log idref="prior"/>
+        </logger>
+        
+        <logger id="treelog.t:big2_barcs" spec="Logger" fileName="$(filebase).trees" logEvery="1000" mode="tree">
+            <log id="TreeWithMetaDataLogger.t:big2_barcs" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@Tree.t:big2_barcs"/>
+        </logger>
+        
+        <operatorschedule id="OperatorSchedule" spec="OperatorSchedule"/>
+    </run>
+</beast>
