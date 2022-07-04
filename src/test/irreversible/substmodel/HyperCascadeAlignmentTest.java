@@ -10,8 +10,8 @@ import beast.core.util.Log;
 import beast.evolution.alignment.Alignment;
 import beast.evolution.alignment.Sequence;
 import beast.util.NexusParser;
-import irreversible.substmodel.HyperCascadeAlignment;
-import irreversible.substmodel.HyperCascadeDataType;
+import irreversible.substmodel.HyperCascadeAlignmentForTriplets;
+import irreversible.substmodel.HyperCascadeDataTypeQuintuplet;
 
 public class HyperCascadeAlignmentTest {
 	
@@ -40,12 +40,12 @@ public class HyperCascadeAlignmentTest {
 		List<Sequence> sequences = new ArrayList<>();
 		sequences.add(seq);
 		
-		HyperCascadeDataType dataType = new HyperCascadeDataType();
+		HyperCascadeDataTypeQuintuplet dataType = new HyperCascadeDataTypeQuintuplet();
 		dataType.initByName("layers", 4);
 		
 		Alignment data = new Alignment(sequences, "nucleotide");
 		
-		HyperCascadeAlignment hyperData = new HyperCascadeAlignment();
+		HyperCascadeAlignmentForTriplets hyperData = new HyperCascadeAlignmentForTriplets();
 		hyperData.initByName("data", data, "userDataType", dataType);
 		
 		hyperData.getSiteCount();

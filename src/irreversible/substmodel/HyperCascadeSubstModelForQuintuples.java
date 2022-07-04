@@ -11,12 +11,12 @@ import beast.evolution.datatype.DataType;
 import beast.evolution.substitutionmodel.ComplexSubstitutionModel;
 
 @Description("Subst model for hyper cascade data.")
-public class HyperCascadeSubstModel extends ComplexSubstitutionModel {
+public class HyperCascadeSubstModelForQuintuples extends ComplexSubstitutionModel {
     final public Input<RealParameter> AGRateInput = new Input<RealParameter>("AGRate", "the rate of mutating "
     		+ "dimension 1 from GG-A to GG-G, "
     		+ "dimension 2 from GA-A to GA-G or AG-A to AG-G, "
     		+ "dimension 3 from AA-A to AA-G.", Validate.REQUIRED);
-    final public Input<HyperCascadeDataTypeTriplet> dataTypeInput = new Input<>("dataType", "reference to hyper cascade datatype", Validate.REQUIRED);
+    final public Input<HyperCascadeDataTypeQuintuplet> dataTypeInput = new Input<>("dataType", "reference to hyper cascade datatype", Validate.REQUIRED);
 
     RealParameter AGRate;
     protected double[][] unnormalizedQ;
@@ -30,7 +30,7 @@ public class HyperCascadeSubstModel extends ComplexSubstitutionModel {
 
 //    private double [] layerFactor;
     
-    public HyperCascadeSubstModel() {
+    public HyperCascadeSubstModelForQuintuples() {
         ratesInput.setRule(Validate.OPTIONAL);
         frequenciesInput.setRule(Validate.FORBIDDEN);
     }
@@ -44,7 +44,7 @@ public class HyperCascadeSubstModel extends ComplexSubstitutionModel {
     	}
     	updateMatrix = true;
     	
-    	HyperCascadeDataTypeTriplet dataType = dataTypeInput.get();
+    	HyperCascadeDataTypeQuintuplet dataType = dataTypeInput.get();
 
         nrOfStates = dataType.getStateCount();
         
@@ -73,7 +73,7 @@ public class HyperCascadeSubstModel extends ComplexSubstitutionModel {
     }
 	
 
-    private void initRateIndices(HyperCascadeDataTypeTriplet dataType) {
+    private void initRateIndices(HyperCascadeDataTypeQuintuplet dataType) {
     	List<String> states = new ArrayList<>(nrOfStates);
     	for (int i = 0; i < nrOfStates; i++) {
     		states.add(dataType.getCharacter(i));
@@ -110,12 +110,12 @@ public class HyperCascadeSubstModel extends ComplexSubstitutionModel {
 		String state2 = states.get(j);
 		boolean diffBy1 = false;
 		
-		int layerCount = 2;//dataTypeInput.get().layersInput.get();
+		int layerCount = 2;
 		int k = 0;
 		int position = -1;
 		layer = -1;
 		for (int r = 0; r < layerCount; r++) {
-			for (int s = 0; s < layerCount-r; s++) {
+			for (int s = 0; s < 3-r; s++) {
 				char c1 = state1.charAt(k);
 				char c2 = state2.charAt(k);
 				if (c1 == '1') {
@@ -137,22 +137,22 @@ public class HyperCascadeSubstModel extends ComplexSubstitutionModel {
 			}
 		}
 
-		String state1_ = state1.replaceAll("([01][01])([01])", "$1\\\\n$2");
-		String state2_ = state2.replaceAll("([01][01])([01])", "$1\\\\n$2");
+		String state1_ = state1.replaceAll("([01][01][01])([01][01])", "$1\\\\n$2");
+		String state2_ = state2.replaceAll("([01][01][01])([01][01])", "$1\\\\n$2"); 
 		
 		System.out.print("\"" + state1_ + "\" -> \"" + state2_ +"\"");
 		if (layer == 0) {
 			System.out.print("[color=\"blue\"];\n");
 			return 0;
 		}
-		if (state1.charAt(position - 2) == '1' && 
-			state1.charAt(position - 1) == '1') {
+		if (state1.charAt(position - 3) == '1' && 
+			state1.charAt(position - 2) == '1') {
 			System.out.print("[color=\"blue\"];\n");
 			return 0;
 		}
 
-		if (state1.charAt(position - 2) == '1' || 
-			state1.charAt(position - 1) == '1') {
+		if (state1.charAt(position - 3) == '1' || 
+			state1.charAt(position - 2) == '1') {
 			System.out.print("[color=\"black\"];\n");
 			return 1;
 		}
@@ -197,7 +197,7 @@ public class HyperCascadeSubstModel extends ComplexSubstitutionModel {
     protected void setupUnnormalizedQMatrix() {
     	Double [] r = AGRate.getValues();
     	for (int i = 0; i < rates.length; i++) {
-	        unnormalizedQ[rates[i][0]][rates[i][1]] = r[rates[i][2]]; // * layerFactor[rates[i][3]];
+	        unnormalizedQ[rates[i][0]][rates[i][1]] = r[rates[i][2]];// * layerFactor[rates[i][3]];
     	}
 	        
     }
@@ -208,11 +208,11 @@ public class HyperCascadeSubstModel extends ComplexSubstitutionModel {
 	}
 		
 	public static void main(String[] args) {
-		HyperCascadeDataTypeTriplet h = new HyperCascadeDataTypeTriplet();
-		h.initByName();
+		HyperCascadeDataTypeQuintuplet h = new HyperCascadeDataTypeQuintuplet();
+		h.initByName("layers", 2);
 		
 		
-		HyperCascadeSubstModel subst = new HyperCascadeSubstModel();
+		HyperCascadeSubstModelForQuintuples subst = new HyperCascadeSubstModelForQuintuples();
 		subst.initByName("dataType", h, "AGRate", "1.0 1.0 1.0");
 	}
 }

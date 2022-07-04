@@ -1,26 +1,25 @@
 package irreversible.substmodel;
 
 import java.util.ArrayList;
+
 import java.util.Arrays;
 import java.util.List;
 
 import beast.core.Description;
-import beast.core.Input;
 import beast.evolution.datatype.DataType;
 import irreversible.util.HyperCascadeCounter;
 
 
 @Description("Data type for hypercascade data representing states of n sites in n layers")
-public class HyperCascadeDataType extends DataType.Base {
-	public Input<Integer> layersInput = new Input<>("layers", "number of layers in system", 4);
+public class HyperCascadeDataTypeTriplet extends DataType.Base {
 
 	private double [][]ambiguousPartials;
 	
-    public HyperCascadeDataType() {} // default c'tor
+    public HyperCascadeDataTypeTriplet() {} // default c'tor
     
     @Override
     public void initAndValidate() {
-    	List<String> states = getStates(layersInput.get());
+    	List<String> states = getStates(2);
 
     	stateCount = states.size();
         codeLength = states.get(0).length();
@@ -82,7 +81,6 @@ public class HyperCascadeDataType extends DataType.Base {
 		}
     }
 
-
     @Override
     public boolean hasConstantCodeLength() {
     	return true;
@@ -111,7 +109,7 @@ public class HyperCascadeDataType extends DataType.Base {
 		}
 		
 		boolean [] isFirstInLayer = new boolean[code[0].length()];
-		int layers = layersInput.get();
+		int layers = 2;
 		int k = 0;
 		for (int i = 0; i < layers; i++) {
 			isFirstInLayer[k] = true;
