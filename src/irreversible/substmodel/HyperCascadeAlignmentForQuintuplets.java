@@ -41,8 +41,8 @@ public class HyperCascadeAlignmentForQuintuplets extends Alignment {
         
         int layerCount = ((HyperCascadeDataTypeQuintuplet)m_dataType).layersInput.get();
         int siteCount = 0;
-        for (int k = 0; k <= totalLayerCount - layerCount; k++) {
-        	siteCount += firstLayerSiteCount - k - layerCount;
+        for (int k = 0; k < totalLayerCount - 2; k++) {
+        	siteCount += firstLayerSiteCount - k - 2;
         }
         
         
@@ -63,13 +63,13 @@ public class HyperCascadeAlignmentForQuintuplets extends Alignment {
 			patternIndex[i] = i;
 		}
 
-		sitePatterns = new int[siteCount - layerCount + 1][taxonCount];
+		sitePatterns = new int[siteCount][taxonCount];
 		int layerOffset = 0;
-        for (int k = 0; k <= totalLayerCount - layerCount; k++) {
+        for (int k = 0; k < totalLayerCount - 2; k++) {
 			for (int j = 0; j < taxonCount; j++) {
-				List<Integer> states = calcSiteValue(layerOffset, firstLayerSiteCount, j, layerCount, data);
-				for (int i = 0; i < firstLayerSiteCount - layerCount + 1; i++) {
-					sitePatterns[i + layerOffset][j] = states.get(i);
+				List<Integer> states = calcSiteValue(layerOffset, firstLayerSiteCount - k, j, 3, data);
+				for (int i = 0; i < firstLayerSiteCount - k - 2; i++) {
+					sitePatterns[i + layerOffset - k * 2][j] = states.get(i);
 				}
 			}
 			layerOffset += firstLayerSiteCount  - k;
@@ -83,7 +83,7 @@ public class HyperCascadeAlignmentForQuintuplets extends Alignment {
 		StringBuilder b = new StringBuilder();
 		for (int i = 0; i < siteCount - layerCount + 1; i++) {
 			int offset = i + layerOffset;
-			for (int j = 0; j < layerCount; j++) {
+			for (int j = 0; j < 2; j++) {
 				for (int k = 0; k < layerCount - j; k++) {
 					char c = seq.charAt(offset + k);
 					if (c == 'A') {

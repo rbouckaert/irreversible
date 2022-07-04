@@ -32,13 +32,11 @@ public class HyperCascadeAlignmentForTriplets extends Alignment {
         }
         firstLayerSiteCount /= totalLayerCount;
         
-        int offset = 0;// offsetInput.get();
-        firstLayerSiteCount -= 2 * offset;
 
         int layerCount = 2;
         int siteCount = 0;
         for (int k = 0; k <= totalLayerCount - layerCount; k++) {
-        	siteCount += firstLayerSiteCount - k - layerCount;
+        	siteCount += firstLayerSiteCount - k - 1;
         }
         
         
@@ -59,16 +57,16 @@ public class HyperCascadeAlignmentForTriplets extends Alignment {
 			patternIndex[i] = i;
 		}
 
-		sitePatterns = new int[siteCount - layerCount + 1][taxonCount];
+		sitePatterns = new int[siteCount][taxonCount];
 		int layerOffset = 0;
-        for (int k = 0; k <= totalLayerCount - layerCount; k++) {
+        for (int k = 0; k < totalLayerCount - 1; k++) {
 			for (int j = 0; j < taxonCount; j++) {
-				List<Integer> states = calcSiteValue(layerOffset, firstLayerSiteCount + 2 * offset, j, layerCount, data);
-				for (int i = 0; i < firstLayerSiteCount - layerCount + 1; i++) {
-					sitePatterns[i + layerOffset][j] = states.get(i + offset);
+				List<Integer> states = calcSiteValue(layerOffset, firstLayerSiteCount - k, j, layerCount, data);
+				for (int i = 0; i < firstLayerSiteCount - k - 1; i++) {
+					sitePatterns[i + layerOffset][j] = states.get(i);
 				}
 			}
-			layerOffset += firstLayerSiteCount  + 2 * offset - k;
+			layerOffset += firstLayerSiteCount - k - 1;
         }
         // calcPatterns();
 	}

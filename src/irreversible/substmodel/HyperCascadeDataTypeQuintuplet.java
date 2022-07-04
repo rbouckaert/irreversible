@@ -106,30 +106,18 @@ public class HyperCascadeDataTypeQuintuplet extends DataType.Base {
 			code[i] = getCharacter(i);
 		}
 		
-		boolean [] isFirstInLayer = new boolean[code[0].length()];
-		int layers = layersInput.get();
-		int k = 0;
-		for (int i = 0; i < layers; i++) {
-			isFirstInLayer[k] = true;
-			k+=layers-i;
-		}
 		
 		for (int i = 0; i < stateCount; i++) {
 			for (int j = 0; j < stateCount; j++) {
-				if (isCompatible(code[i], code[j], isFirstInLayer)) {
+				if (isCompatible(code[i], code[j])) {
 					ambiguousPartials[i][j] = 1.0;
 				}
 			}
 		}
 	}
 
-	private boolean isCompatible(String state1, String state2, boolean [] isFirstInLayer) {
-		for (int i = 0; i < state1.length(); i++) {
-			if (!(isFirstInLayer[i] || state1.charAt(i) == state2.charAt(i))) {
-				return false;
-			}
-		}
-		return true;
+	private boolean isCompatible(String state1, String state2) {
+		return state1.charAt(3) == state2.charAt(3) && state1.charAt(4) == state2.charAt(4);		
 	}
 
 

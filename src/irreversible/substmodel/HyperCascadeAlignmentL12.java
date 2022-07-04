@@ -37,14 +37,8 @@ public class HyperCascadeAlignmentL12 extends Alignment {
         }
         firstLayerSiteCount /= totalLayerCount;
         
-        int offset = 1;
-        firstLayerSiteCount -= 2 * offset;
-
         int layerCount = 2;//((HyperCascadeDataTypeTriplet)m_dataType).layersInput.get();
-        int siteCount = 0;
-        for (int k = 0; k <= totalLayerCount - layerCount; k++) {
-        	siteCount += firstLayerSiteCount - k - layerCount;
-        }
+        int siteCount = firstLayerSiteCount - 2;
         
         
         stateCounts = new ArrayList<>();
@@ -64,26 +58,21 @@ public class HyperCascadeAlignmentL12 extends Alignment {
 			patternIndex[i] = i;
 		}
 
-		sitePatterns = new int[siteCount - layerCount + 1][taxonCount];
-		int layerOffset = 0;
-        for (int k = 0; k <= totalLayerCount - layerCount; k++) {
-			for (int j = 0; j < taxonCount; j++) {
-				List<Integer> states = calcSiteValue(layerOffset, firstLayerSiteCount + 2 * offset, j, layerCount, data);
-				for (int i = 0; i < firstLayerSiteCount - layerCount + 1; i++) {
-					sitePatterns[i + layerOffset][j] = states.get(i + offset);
-				}
+		sitePatterns = new int[siteCount][taxonCount];
+		for (int j = 0; j < taxonCount; j++) {
+			List<Integer> states = calcSiteValue(firstLayerSiteCount, j, layerCount, data);
+			for (int i = 0; i < siteCount; i++) {
+				sitePatterns[i][j] = states.get(i);
 			}
-			layerOffset += firstLayerSiteCount  + 2 * offset - k;
-        }
-        // calcPatterns();
+		}
 	}
 
 
-	private List<Integer> calcSiteValue(int layerOffset, int siteCount, int taxon, int layerCount, Alignment data) {
+	private List<Integer> calcSiteValue(int siteCount, int taxon, int layerCount, Alignment data) {
 		String seq = data.getSequenceAsString(taxaNames.get(taxon)).toUpperCase();
 		StringBuilder b = new StringBuilder();
 		for (int i = 0; i < siteCount - layerCount + 1; i++) {
-			int offset = i + layerOffset;
+			int offset = i;
 			for (int j = 0; j < layerCount; j++) {
 				for (int k = 0; k < layerCount - j; k++) {
 					char c = seq.charAt(offset + k);
@@ -108,7 +97,7 @@ public class HyperCascadeAlignmentL12 extends Alignment {
 	@Override
 	public double[] getTipLikelihoods(int taxonIndex, int patternIndex_) {
     	int state = getPattern(taxonIndex, patternIndex_);
-		return ((HyperCascadeDataTypeQuintuplet)m_dataType).getAmbiguousPartials(state);
+		return ((HyperCascadeDataTypeTriplet)m_dataType).getAmbiguousPartials(state);
 	}
 	
 	public double[] getAmbiguousPartials(int state) {
