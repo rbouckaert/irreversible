@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><beast beautitemplate='Standard' beautistatus='' namespace="beast.core:beast.evolution.alignment:beast.evolution.tree.coalescent:beast.core.util:beast.evolution.nuc:beast.evolution.operators:beast.evolution.sitemodel:beast.evolution.substitutionmodel:beast.evolution.likelihood" required="" version="2.6">
+
+<data id="dna" spec="Alignment" name="alignment">
+    $(sequences)
+</data>
+
+    <data id="hypercascade_triplets" spec="irreversible.substmodel.HyperCascadeAlignmentForTriplets"
+        data="@dna" totalLayers="4">
+        <userDataType id="HyperCascadeDataTypeTriplet" spec="irreversible.substmodel.HyperCascadeDataTypeTriplet" />
+    </data>
+
+    <data id="hypercascade_L12" spec="irreversible.substmodel.HyperCascadeAlignmentL12"
+        data="@dna" totalLayers="4">
+        <userDataType idref="HyperCascadeDataTypeTriplet"/>
+    </data>
+
+    <data id="hypercascade_quintuplets" spec="irreversible.substmodel.HyperCascadeAlignmentForQuintuplets"
+        data="@dna" totalLayers="4">
+        <userDataType id="HyperCascadeAlignmentForQuintuplet" spec="irreversible.substmodel.HyperCascadeDataTypeQuintuplet" layers="4"/>
+    </data>
+
+    
+
+<map name="Uniform" >beast.math.distributions.Uniform</map>
+<map name="Exponential" >beast.math.distributions.Exponential</map>
+<map name="LogNormal" >beast.math.distributions.LogNormalDistributionModel</map>
+<map name="Normal" >beast.math.distributions.Normal</map>
+<map name="Beta" >beast.math.distributions.Beta</map>
+<map name="Gamma" >beast.math.distributions.Gamma</map>
+<map name="LaplaceDistribution" >beast.math.distributions.LaplaceDistribution</map>
+<map name="prior" >beast.math.distributions.Prior</map>
+<map name="InverseGamma" >beast.math.distributions.InverseGamma</map>
+<map name="OneOnX" >beast.math.distributions.OneOnX</map>
+
+<run id="mcmc" spec="MCMC" chainLength="2000000">
+    <state id="state" spec="State" storeEvery="5000">
+        <tree id="Tree.t:dna" spec="beast.evolution.tree.Tree" name="stateNode">
+            <taxonset id="TaxonSet.dna" spec="TaxonSet">
+                <alignment idref="dna"/>
+            </taxonset>
+        </tree>
+        <parameter id="AGRate" spec="parameter.RealParameter" dimension="3" lower="0.1" name="stateNode">1.8 1.0 0.2</parameter>
+        <parameter id="birthRate.t:dna" spec="parameter.RealParameter" name="stateNode">1.0</parameter>
+        <parameter id="clockRate.c:dna" spec="parameter.RealParameter" name="stateNode">1.0</parameter>
+    </state>
+    <init id="RandomTree.t:dna" spec="beast.evolution.tree.RandomTree" estimate="false" initial="@Tree.t:dna" taxa="@dna">
+        <populationModel id="ConstantPopulation0.t:dna" spec="ConstantPopulation">
+            <parameter id="randomPopSize.t:dna" spec="parameter.RealParameter" name="popSize">1.0</parameter>
+        </populationModel>
+    </init>
+    <distribution id="posterior" spec="util.CompoundDistribution">
+        <distribution id="prior" spec="util.CompoundDistribution">
+            <distribution id="YuleModel.t:dna" spec="beast.evolution.speciation.YuleModel" birthDiffRate="@birthRate.t:dna" tree="@Tree.t:dna" originHeight="30"/>
+            <prior id="YuleBirthRatePrior.t:dna" name="distribution" x="@birthRate.t:dna">
+                <Uniform id="Uniform.1" name="distr" upper="Infinity"/>
+            </prior>
+            <prior id="ClockPrior.c:dna" name="distribution" x="@clockRate.c:dna">
+                <Uniform id="Uniform.0" name="distr" upper="100"/>
+            </prior>
+            <prior id="AGRate.s:big2_barcs" name="distribution" x="@AGRate">
+                <LogNormal id="LogNormalDistributionModel.1x" name="distr">
+                    <parameter id="RealParameter.7" spec="parameter.RealParameter" estimate="false" name="M">1.0</parameter>
+                    <parameter id="RealParameter.8" spec="parameter.RealParameter" estimate="false" name="S">1.25</parameter>
+                </LogNormal>
+            </prior>
+            <distribution id="root.prior" spec="beast.math.distributions.MRCAPrior" tree="@Tree.t:dna">
+                <taxonset idref="TaxonSet.dna"/>
+                <LogNormal id="LogNormalDistributionModel.1" meanInRealSpace="true" name="distr">
+                    <parameter id="RealParameter.7" spec="parameter.RealParameter" estimate="false" name="M">25.0</parameter>
+                    <parameter id="RealParameter.8" spec="parameter.RealParameter" estimate="false" lower="0.0" name="S" upper="5.0">0.1</parameter>
+                </LogNormal>
+            </distribution>
+        </distribution>
+        <distribution id="likelihood" spec="util.CompoundDistribution" useThreads="true">
+            <distribution id="jointTreeLikelihood" spec="irreversible.substmodel.ConditionedOnDistribution">
+                 <distrXY id="treeLikelihood.Y" spec="TreeLikelihood" data="@hypercascade_triplets" tree="@Tree.t:big2_barcs" useAmbiguities="false">
+                    <siteModel id="SiteModel.s:Y" spec="SiteModel" 
+                        gammaCategoryCount="1" shape="@gammaShape.s:big2_barcs"
+                        mutationRate="1.0" proportionInvariant="0.0">
+                        <substModel id="hky.s:Y" spec="irreversible.substmodel.HyperCascadeSubstModel" 
+                            dataType="@HyperCascadeDataTypeTriplet"
+                            AGRate="@AGRate">
+                        </substModel>
+                    </siteModel>
+                    <branchRateModel id="StrictClock.c:big2_barcs" spec="beast.evolution.branchratemodel.StrictClockModel">
+                        <parameter id="clockRate.c:big2_barcs" spec="parameter.RealParameter" estimate="false" name="clock.rate">1.0</parameter>
+                    </branchRateModel>
+                </distrXY>
+
+                <distrY id="treeLikelihood.XY" spec="util.CompoundDistribution">
+                  <distribution id="treeLikelihood.L12" spec="TreeLikelihood" data="@hypercascade_L12" tree="@Tree.t:big2_barcs"
+                    scaling="always" useAmbiguities="true">
+                    <siteModel id="SiteModel.s:big2_barcsL12" spec="SiteModel" 
+                        gammaCategoryCount="1" shape="@gammaShape.s:big2_barcs"
+                        mutationRate="1.0" proportionInvariant="0.0">
+                        <substModel id="hky.s:big2_barcsL12" spec="irreversible.substmodel.HyperCascadeSubstModel" 
+                            dataType="@HyperCascadeDataTypeTriplet"
+                            AGRate="@AGRate">
+                        </substModel>
+                    </siteModel>
+                    <branchRateModel idref="StrictClock.c:big2_barcs"/>
+                  </distribution>
+                  
+                  <distribution id="treeLikelihood.Quintuplets" spec="TreeLikelihood" data="@hypercascade_quintuplets" tree="@Tree.t:big2_barcs"
+                    scaling="always" useAmbiguities="true">
+                    <siteModel id="SiteModel.s:big2_barcsQuintuplets" spec="SiteModel" 
+                        gammaCategoryCount="1" shape="@gammaShape.s:big2_barcs"
+                        mutationRate="1.0" proportionInvariant="0.0">
+                        <substModel id="hky.s:big2_barcsQuintuplets" spec="irreversible.substmodel.HyperCascadeSubstModelForQuintuples" 
+                            dataType="@HyperCascadeAlignmentForQuintuplet"
+                            AGRate="@AGRate">
+                        </substModel>
+                    </siteModel>
+                    <branchRateModel idref="StrictClock.c:big2_barcs"/>
+                  </distribution>
+                </distrY>
+                
+              </distribution>
+            </distribution>
+    </distribution>
+    <operator id="YuleBirthRateScaler.t:dna" spec="BactrianScaleOperator" parameter="@birthRate.t:dna" weight="3.0"/>
+    <operator id="YuleModelTreeScaler.t:dna" spec="BactrianScaleOperator" scaleFactor="0.1" tree="@Tree.t:dna" weight="3.0"/>
+    <operator id="YuleModelTreeRootScaler.t:dna" spec="BactrianScaleOperator" rootOnly="true" scaleFactor="0.1" tree="@Tree.t:dna" weight="3.0"/>
+    <operator id="YuleModelUniformOperator.t:dna" spec="Uniform" tree="@Tree.t:dna" weight="30.0"/>
+    <operator id="YuleModelSubtreeSlide.t:dna" spec="BactrianSubtreeSlide" tree="@Tree.t:dna" weight="15.0"/>
+    <operator id="YuleModelNarrow.t:dna" spec="Exchange" tree="@Tree.t:dna" weight="15.0"/>
+    <operator id="YuleModelWide.t:dna" spec="Exchange" isNarrow="false" tree="@Tree.t:dna" weight="3.0"/>
+    <operator id="YuleModelWilsonBalding.t:dna" spec="WilsonBalding" tree="@Tree.t:dna" weight="3.0"/>
+    <operator id="StrictClockRateScaler.c:dna" spec="BactrianScaleOperator" parameter="@clockRate.c:dna" weight="3.0"/>
+    <operator id="strictClockUpDownOperator.c:dna" spec="BactrianUpDownOperator" scaleFactor="0.1" weight="3.0">
+        <up idref="clockRate.c:dna"/>
+        <down idref="Tree.t:dna"/>
+    </operator>
+
+<!--
+        <operator id="AGRateExchanger.s:big2_barcs" spec="DeltaExchangeOperator" delta="0.01" weight="0.3">
+            <parameter idref="AGRate"/>
+        </operator>
+-->
+
+    <logger id="tracelog" spec="Logger" fileName="$(filebase)-$(run).log" logEvery="1000" model="@posterior" sanitiseHeaders="true" sort="smart">
+        <log idref="posterior"/>
+        <log idref="likelihood"/>
+        <log idref="prior"/>
+        <log idref="treeLikelihood.dna"/>
+        <log id="TreeHeight.t:dna" spec="beast.evolution.tree.TreeHeightLogger" tree="@Tree.t:dna"/>
+        <log idref="YuleModel.t:dna"/>
+        <log idref="birthRate.t:dna"/>
+        <log idref="root.prior"/>
+        <log idref="clockRate.c:dna"/>
+        <log idref="AGRate"/>
+        <log id="RNNITreeDistance" spec="beast.evolution.tree.TreeDistanceLogger" tree="@Tree.t:dna">
+            <ref spec="beast.util.TreeParser" id='trueTree' IsLabelledNewick='true' newick="$(tree)" taxonset="@TaxonSet.dna"/>
+        </log>
+    </logger>
+
+    <logger id="screenlog" spec="Logger" logEvery="1000000">
+        <log idref="posterior"/>
+        <log idref="likelihood"/>
+        <log idref="prior"/>
+    </logger>
+
+    <logger id="treelog.t:dna" spec="Logger" fileName="$(filebase)-$(run).trees" logEvery="1000" mode="tree">
+        <log id="TreeWithMetaDataLogger.t:dna" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@Tree.t:dna"/>
+    </logger>
+
+    <operatorschedule id="OperatorSchedule" spec="OperatorSchedule"/>
+</run>
+</beast>

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><beast beautitemplate='Standard' beautistatus='' namespace="beast.core:beast.evolution.alignment:beast.evolution.tree.coalescent:beast.core.util:beast.evolution.nuc:beast.evolution.operators:beast.evolution.sitemodel:beast.evolution.substitutionmodel:beast.evolution.likelihood" required="" version="2.6">
+
+<data id="dna" spec="Alignment" name="alignment">
+    $(sequences)
+</data>
+
+
+    
+
+<map name="Uniform" >beast.math.distributions.Uniform</map>
+<map name="Exponential" >beast.math.distributions.Exponential</map>
+<map name="LogNormal" >beast.math.distributions.LogNormalDistributionModel</map>
+<map name="Normal" >beast.math.distributions.Normal</map>
+<map name="Beta" >beast.math.distributions.Beta</map>
+<map name="Gamma" >beast.math.distributions.Gamma</map>
+<map name="LaplaceDistribution" >beast.math.distributions.LaplaceDistribution</map>
+<map name="prior" >beast.math.distributions.Prior</map>
+<map name="InverseGamma" >beast.math.distributions.InverseGamma</map>
+<map name="OneOnX" >beast.math.distributions.OneOnX</map>
+
+<run id="mcmc" spec="MCMC" chainLength="10000000">
+    <state id="state" spec="State" storeEvery="5000">
+        <tree id="Tree.t:dna" spec="beast.evolution.tree.Tree" name="stateNode">
+            <taxonset id="TaxonSet.dna" spec="TaxonSet">
+                <alignment idref="dna"/>
+            </taxonset>
+        </tree>
+        <parameter id="birthRate.t:dna" spec="parameter.RealParameter" name="stateNode">1.0</parameter>
+        <parameter id="clockRate.c:dna" spec="parameter.RealParameter" name="stateNode">1.0</parameter>
+        <parameter id="AGRate.s:big2_barcs" spec="parameter.RealParameter" lower="0.0" name="stateNode">1.0</parameter>
+        <parameter id="GARate.s:big2_barcs" spec="parameter.RealParameter" lower="0.0" name="stateNode">1.0</parameter>
+        <parameter id="GGRate.s:big2_barcs" spec="parameter.RealParameter" lower="0.0" name="stateNode">1.0</parameter>
+     </state>
+    <init id="RandomTree.t:dna" spec="beast.evolution.tree.RandomTree" estimate="false" initial="@Tree.t:dna" taxa="@dna">
+        <populationModel id="ConstantPopulation0.t:dna" spec="ConstantPopulation">
+            <parameter id="randomPopSize.t:dna" spec="parameter.RealParameter" name="popSize">1.0</parameter>
+        </populationModel>
+    </init>
+    <distribution id="posterior" spec="util.CompoundDistribution">
+        <distribution id="prior" spec="util.CompoundDistribution">
+            <distribution id="YuleModel.t:dna" spec="beast.evolution.speciation.YuleModel" birthDiffRate="@birthRate.t:dna" tree="@Tree.t:dna" originHeight="30"/>
+            <prior id="YuleBirthRatePrior.t:dna" name="distribution" x="@birthRate.t:dna">
+                <Uniform id="Uniform.1" name="distr" upper="Infinity"/>
+            </prior>
+            <prior id="ClockPrior.c:dna" name="distribution" x="@clockRate.c:dna">
+                <Uniform id="Uniform.0" name="distr" upper="100"/>
+            </prior>
+            <distribution id="root.prior" spec="beast.math.distributions.MRCAPrior" tree="@Tree.t:dna">
+                <taxonset idref="TaxonSet.dna"/>
+                <LogNormal id="LogNormalDistributionModel.1" meanInRealSpace="true" name="distr">
+                    <parameter id="RealParameter.7" spec="parameter.RealParameter" estimate="false" name="M">25.0</parameter>
+                    <parameter id="RealParameter.8" spec="parameter.RealParameter" estimate="false" lower="0.0" name="S" upper="5.0">0.1</parameter>
+                </LogNormal>
+            </distribution>
+            <prior id="AGRatePrior.s:big2_barcs" name="distribution" x="@AGRate.s:big2_barcs">
+                <LogNormal id="LogNormalDistributionModel.1b" name="distr">
+                    <parameter id="RealParameter.7b" spec="parameter.RealParameter" estimate="false" name="M">1.0</parameter>
+                    <parameter id="RealParameter.8b" spec="parameter.RealParameter" estimate="false" name="S">1.25</parameter>
+                </LogNormal>
+            </prior>
+            <prior id="GARatePrior.s:big2_barcs" name="distribution" x="@GARate.s:big2_barcs" distr="@LogNormalDistributionModel.1"/>
+            <prior id="GGRatePrior.s:big2_barcs" name="distribution" x="@GGRate.s:big2_barcs" distr="@LogNormalDistributionModel.1"/>
+        </distribution>
+        <distribution id="likelihood" spec="util.CompoundDistribution" useThreads="true">
+            <distribution id="treeLikelihood.dna" spec="ThreadedTreeLikelihood" data="@dna" tree="@Tree.t:dna">
+                <siteModel id="SiteModel.s:dna" spec="SiteModel">
+                    <parameter id="mutationRate.s:dna" spec="parameter.RealParameter" estimate="false" name="mutationRate">1.0</parameter>
+                    <parameter id="gammaShape.s:dna" spec="parameter.RealParameter" estimate="false" name="shape">1.0</parameter>
+                    <parameter id="proportionInvariant.s:dna" spec="parameter.RealParameter" estimate="false" lower="0.0" name="proportionInvariant" upper="1.0">0.0</parameter>
+                    <substModel id="bigMEMOIR.s:big2_barcs" spec="irreversible.substmodel.BigMEMOIR" 
+                            AGRate="@AGRate.s:big2_barcs"
+                            GARate="@GARate.s:big2_barcs"
+                            GGRate="@GGRate.s:big2_barcs"
+                            >
+                    </substModel>
+                </siteModel>
+                <branchRateModel id="StrictClock.c:dna" spec="beast.evolution.branchratemodel.StrictClockModel" clock.rate="@clockRate.c:dna"/>
+            </distribution>
+        </distribution>
+    </distribution>
+    <operator id="YuleBirthRateScaler.t:dna" spec="BactrianScaleOperator" parameter="@birthRate.t:dna" weight="3.0"/>
+    <operator id="YuleModelTreeScaler.t:dna" spec="BactrianScaleOperator" scaleFactor="0.5" tree="@Tree.t:dna" weight="3.0"/>
+    <operator id="YuleModelTreeRootScaler.t:dna" spec="BactrianScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@Tree.t:dna" weight="3.0"/>
+    <operator id="YuleModelUniformOperator.t:dna" spec="Uniform" tree="@Tree.t:dna" weight="30.0"/>
+    <operator id="YuleModelSubtreeSlide.t:dna" spec="BactrianSubtreeSlide" tree="@Tree.t:dna" weight="15.0"/>
+    <operator id="YuleModelNarrow.t:dna" spec="Exchange" tree="@Tree.t:dna" weight="15.0"/>
+    <operator id="YuleModelWide.t:dna" spec="Exchange" isNarrow="false" tree="@Tree.t:dna" weight="3.0"/>
+    <operator id="YuleModelWilsonBalding.t:dna" spec="WilsonBalding" tree="@Tree.t:dna" weight="3.0"/>
+    <operator id="StrictClockRateScaler.c:dna" spec="BactrianScaleOperator" parameter="@clockRate.c:dna" weight="3.0"/>
+    <operator id="strictClockUpDownOperator.c:dna" spec="BactrianUpDownOperator" weight="3.0">
+        <up idref="clockRate.c:dna"/>
+        <down idref="Tree.t:dna"/>
+    </operator>
+    <operator id="GARateScaler.s:big2_barcs" spec="BactrianScaleOperator" parameter="@GARate.s:big2_barcs" weight="0.25"/>
+    <operator id="GGRateScaler.s:big2_barcs" spec="BactrianScaleOperator" parameter="@GGRate.s:big2_barcs" weight="0.25"/>
+
+    <logger id="tracelog" spec="Logger" fileName="$(filebase).log" logEvery="1000" model="@posterior" sanitiseHeaders="true" sort="smart">
+        <log idref="posterior"/>
+        <log idref="likelihood"/>
+        <log idref="prior"/>
+        <log idref="treeLikelihood.dna"/>
+        <log id="TreeHeight.t:dna" spec="beast.evolution.tree.TreeHeightLogger" tree="@Tree.t:dna"/>
+        <log idref="YuleModel.t:dna"/>
+        <log idref="birthRate.t:dna"/>
+        <log idref="root.prior"/>
+        <log idref="clockRate.c:dna"/>
+        <log idref="AGRate.s:big2_barcs"/>
+        <log idref="GARate.s:big2_barcs"/>
+        <log idref="GGRate.s:big2_barcs"/>
+        <log id="RNNITreeDistance" spec="beast.evolution.tree.TreeDistanceLogger" tree="@Tree.t:dna">
+            <ref spec="beast.util.TreeParser" id='trueTree' IsLabelledNewick='true' newick="$(tree)" taxonset="@TaxonSet.dna"/>
+        </log>
+    </logger>
+
+    <logger id="screenlog" spec="Logger" logEvery="1000000">
+        <log idref="posterior"/>
+        <log idref="likelihood"/>
+        <log idref="prior"/>
+    </logger>
+
+    <logger id="treelog.t:dna" spec="Logger" fileName="$(filebase).trees" logEvery="1000" mode="tree">
+        <log id="TreeWithMetaDataLogger.t:dna" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@Tree.t:dna"/>
+    </logger>
+
+    <operatorschedule id="OperatorSchedule" spec="OperatorSchedule"/>
+</run>
+</beast>
