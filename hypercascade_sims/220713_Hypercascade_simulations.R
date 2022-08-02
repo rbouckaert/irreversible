@@ -30,6 +30,11 @@ hypercascade_sim_endpt <- function(subunits = 20,
   
   i <- 2
   
+  #If everything edited, return
+  if(times[i-1] < time & all(results[,i - 1] != 0)){
+    return(list(results[,i-1], times[i-2], times[i-1], 0))
+  }
+  
   #Loop through until we exceed the given time or edit the barcode to completion
   while(times[i-1] < time){
     
@@ -104,12 +109,17 @@ hypercascade_sim_endpt <- function(subunits = 20,
     }
     
     i <- i + 1
+    
+    #If everything edited, return
+    if(times[i-1] < time & all(results[,i - 1] != 0)){
+      return(list(results[,i-1], times[i-2], times[i-1], 0))
+    }
   }
   
   #Returns the edited state and final editing time prior to the specified point
   return(list(results[,i-2], times[i-2], times[i-1], sum(propensities)))
 }
-
+                                                         
 #simulates hypercascade editing over a given phylogeny
 hypercascade_cell_tree <- function(subunits = 20,
                                    p = c(H01_for_nls[H01_for_nls$Layer == 1 &
