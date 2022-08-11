@@ -3,11 +3,11 @@ package irreversible.substmodel;
 import java.util.List;
 import java.util.Random;
 
-import beast.core.Description;
-import beast.core.Distribution;
-import beast.core.Input;
-import beast.core.State;
-import beast.core.Input.Validate;
+import beast.base.core.Description;
+import beast.base.inference.Distribution;
+import beast.base.core.Input;
+import beast.base.inference.State;
+import beast.base.core.Input.Validate;
 
 @Description("Returns P(X|Y) based on P(X,Y) and P(Y) by calculating P(X|Y)=P(X,Y)/P(Y)")
 public class ConditionedOnDistribution extends Distribution {

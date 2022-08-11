@@ -6,10 +6,10 @@ import java.util.*;
 
 import org.junit.jupiter.api.Test;
 
-import beast.core.util.Log;
-import beast.evolution.alignment.Alignment;
-import beast.evolution.alignment.Sequence;
-import beast.util.NexusParser;
+import beast.base.core.Log;
+import beast.base.evolution.alignment.Alignment;
+import beast.base.evolution.alignment.Sequence;
+import beast.base.parser.NexusParser;
 import irreversible.substmodel.HyperCascadeAlignmentForTriplets;
 import irreversible.substmodel.HyperCascadeDataTypeQuintuplet;
 

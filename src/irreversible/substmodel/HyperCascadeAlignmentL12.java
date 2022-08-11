@@ -4,10 +4,10 @@ package irreversible.substmodel;
 
 import java.util.*;
 
-import beast.core.Description;
-import beast.core.Input;
-import beast.core.Input.Validate;
-import beast.evolution.alignment.Alignment;
+import beast.base.core.Description;
+import beast.base.core.Input;
+import beast.base.core.Input.Validate;
+import beast.base.evolution.alignment.Alignment;
 import irreversible.util.HyperCascadeCounter;
 
 @Description("Class representing hyper cascade alignment data for layers 1 & 2. "

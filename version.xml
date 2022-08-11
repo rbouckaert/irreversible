@@ -1,5 +1,44 @@
-<package name='irreversible' version='0.0.1'>
-	<depends on='beast2' atleast='2.6.7'/>
-	<depends on='BEASTLabs' atleast='1.9.6'/>
+<package name='irreversible' version='0.0.2'>
+        <depends on='BEAST.base' atleast='2.7.0'/>
+        <depends on='BEAST.app' atleast='2.7.0'/>
+        <depends on='BEASTLabs' atleast='2.0.0'/>
 
+
+    <service type="beast.base.core.BEASTInterface">
+        <provider classname="irreversible.substmodel.BigMEMOIR"/>
+        <provider classname="irreversible.substmodel.ConditionedOnDistribution"/>
+        <provider classname="irreversible.substmodel.HyperCascadeAlignmentForQuintuplets"/>
+        <provider classname="irreversible.substmodel.HyperCascadeAlignmentForTriplets"/>
+        <provider classname="irreversible.substmodel.HyperCascadeAlignmentL12"/>
+        <provider classname="irreversible.substmodel.HyperCascadeDataTypeQuintuplet"/>
+        <provider classname="irreversible.substmodel.HyperCascadeDataTypeTriplet"/>
+        <provider classname="irreversible.substmodel.HyperCascadeSubstModel"/>
+        <provider classname="irreversible.substmodel.HyperCascadeSubstModelForQuintuples"/>
+        <provider classname="irreversible.util.ClusterTree"/>
+        <provider classname="irreversible.util.HyperCascadeCounter"/>
+        <provider classname="irreversible.util.UPGMAFitter"/>
+    </service>
+
+    <service type="beast.base.evolution.datatype.DataType">
+        <provider classname="irreversible.substmodel.HyperCascadeDataTypeQuintuplet"/>
+        <provider classname="irreversible.substmodel.HyperCascadeDataTypeTriplet"/>
+    </service>
+    
+    
+    <packageapp description="Subst model for hyper cascade data."
+        class="irreversible.substmodel.HyperCascadeSubstModelForQuintuples"
+        args=""/>
+
+    <packageapp description="Subst model for hyper cascade data."
+        class="irreversible.substmodel.HyperCascadeSubstModel"
+        args=""/>
+
+    <packageapp description="Fits UPGMA tree to an alignemnt and "
+        class="irreversible.util.UPGMAFitter"
+        args=""/>
+
+    <packageapp description="Counts number of states for a size of hyper cascade system"
+        class="irreversible.util.HyperCascadeCounter"
+        args=""/>
+    
 </package>

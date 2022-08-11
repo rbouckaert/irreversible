@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><beast beautitemplate='Standard' beautistatus='' namespace="beast.core:beast.evolution.alignment:beast.evolution.tree.coalescent:beast.core.util:beast.evolution.nuc:beast.evolution.operators:beast.evolution.sitemodel:beast.evolution.substitutionmodel:beast.evolution.likelihood" required="" version="2.6">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><beast beautitemplate='Standard' beautistatus='' namespace="beast.pkgmgmt:beast.base.core:beast.base.inference:beast.base.evolution.alignment:beast.base.evolution.tree.coalescent:beast.base.util:beast.base.math:beast.evolution.nuc:beast.base.evolution.operator:beast.base.inference.operator:beast.base.evolution.sitemodel:beast.base.evolution.substitutionmodel:beast.base.evolution.likelihood" required="" version="2.6">
     <data
 id="hypercascade_hiPSC_barcs_subset"
 spec="Alignment"
@@ -52,16 +52,16 @@ name="alignment">
 
 
 
-    <map name="Uniform" >beast.math.distributions.Uniform</map>
-    <map name="Exponential" >beast.math.distributions.Exponential</map>
-    <map name="LogNormal" >beast.math.distributions.LogNormalDistributionModel</map>
-    <map name="Normal" >beast.math.distributions.Normal</map>
-    <map name="Beta" >beast.math.distributions.Beta</map>
-    <map name="Gamma" >beast.math.distributions.Gamma</map>
-    <map name="LaplaceDistribution" >beast.math.distributions.LaplaceDistribution</map>
-    <map name="prior" >beast.math.distributions.Prior</map>
-    <map name="InverseGamma" >beast.math.distributions.InverseGamma</map>
-    <map name="OneOnX" >beast.math.distributions.OneOnX</map>
+    <map name="Uniform" >beast.base.inference.distribution.Uniform</map>
+    <map name="Exponential" >beast.base.inference.distribution.Exponential</map>
+    <map name="LogNormal" >beast.base.inference.distribution.LogNormalDistributionModel</map>
+    <map name="Normal" >beast.base.inference.distribution.Normal</map>
+    <map name="Beta" >beast.base.inference.distribution.Beta</map>
+    <map name="Gamma" >beast.base.inference.distribution.Gamma</map>
+    <map name="LaplaceDistribution" >beast.base.inference.distribution.LaplaceDistribution</map>
+    <map name="prior" >beast.base.inference.distribution.Prior</map>
+    <map name="InverseGamma" >beast.base.inference.distribution.InverseGamma</map>
+    <map name="OneOnX" >beast.base.inference.distribution.OneOnX</map>
     
     
               <distribution id="jointTreeLikelihood" spec="irreversible.substmodel.ConditionedOnDistribution">
@@ -74,12 +74,12 @@ name="alignment">
                         	AGRate="@AGRate">
                         </substModel>
                     </siteModel>
-                    <branchRateModel id="StrictClock.c:big2_barcs" spec="beast.evolution.branchratemodel.StrictClockModel">
+                    <branchRateModel id="StrictClock.c:big2_barcs" spec="beast.base.evolution.branchratemodel.StrictClockModel">
                         <parameter id="clockRate.c:big2_barcs" spec="parameter.RealParameter" estimate="false" name="clock.rate">1.0</parameter>
                     </branchRateModel>
                 </distrXY>
 
-                <distrY id="treeLikelihood.XY" spec="util.CompoundDistribution">
+                <distrY id="treeLikelihood.XY" spec="beast.base.inference.CompoundDistribution">
                   <distribution id="treeLikelihood.L12" spec="TreeLikelihood" data="@hypercascade_L12" tree="@Tree.t:big2_barcs"
                 	scaling="always" useAmbiguities="true">
                     <siteModel id="SiteModel.s:big2_barcsL12" spec="SiteModel" 
@@ -115,7 +115,7 @@ name="alignment">
 -->
 	<run id="coupledmcmc" spec="beast.coupledMCMC.CoupledMCMC" chainLength="5000000" target="0.234" chains="4" resampleEvery="500">  
         <state id="state" spec="State" storeEvery="5000">
-            <tree id="Tree.t:big2_barcs" spec="beast.evolution.tree.Tree" name="stateNode">
+            <tree id="Tree.t:big2_barcs" spec="beast.base.evolution.tree.Tree" name="stateNode">
                 <taxonset id="TaxonSet.big2_barcs" spec="TaxonSet">
                     <alignment idref="hypercascade_hiPSC_barcs_subset"/>
                 </taxonset>
@@ -125,7 +125,7 @@ name="alignment">
             <parameter id="gammaShape.s:big2_barcs" spec="parameter.RealParameter" name="stateNode" lower="0.1">1.0</parameter>
         </state>
 
-        <init id="RandomTree.t:big2_barcs" spec="beast.evolution.tree.RandomTree" estimate="false" initial="@Tree.t:big2_barcs" taxa="@hypercascade_hiPSC_barcs_subset"
+        <init id="RandomTree.t:big2_barcs" spec="beast.base.evolution.tree.coalescent.RandomTree" estimate="false" initial="@Tree.t:big2_barcs" taxa="@hypercascade_hiPSC_barcs_subset"
             rootHeight="0.5">
             <populationModel id="ConstantPopulation0.t:big2_barcs" spec="ConstantPopulation">
                 <parameter id="randomPopSize.t:big2_barcs" spec="parameter.RealParameter" name="popSize">1</parameter>
@@ -133,13 +133,13 @@ name="alignment">
         </init>
 
 <!--        
-        <init id="ClusterTree.t:big2_barcs" spec="beast.util.ClusterTree" estimate="false" initial="@Tree.t:big2_barcs" 
+        <init id="ClusterTree.t:big2_barcs" spec="beast.base.evolution.tree.ClusterTree" estimate="false" initial="@Tree.t:big2_barcs" 
         	taxa="@hypercascade_hiPSC_barcs_subset"/>
 -->
         
-        <distribution id="posterior" spec="util.CompoundDistribution">
-            <distribution id="prior" spec="util.CompoundDistribution">
-                <distribution id="YuleModel.t:big2_barcs" spec="beast.evolution.speciation.YuleModel" birthDiffRate="@birthRate.t:big2_barcs" tree="@Tree.t:big2_barcs"/>
+        <distribution id="posterior" spec="beast.base.inference.CompoundDistribution">
+            <distribution id="prior" spec="beast.base.inference.CompoundDistribution">
+                <distribution id="YuleModel.t:big2_barcs" spec="beast.base.evolution.speciation.YuleModel" birthDiffRate="@birthRate.t:big2_barcs" tree="@Tree.t:big2_barcs"/>
                 <prior id="YuleBirthRatePrior.t:big2_barcs" name="distribution" x="@birthRate.t:big2_barcs">
                     <Gamma id="Gamma.2" name="distr">
                         <parameter id="RealParameter.9" spec="parameter.RealParameter" estimate="false" name="alpha">2.0</parameter>
@@ -158,7 +158,7 @@ name="alignment">
                     </LogNormal>
                 </prior>
             </distribution>
-            <distribution id="likelihood" spec="util.CompoundDistribution">
+            <distribution id="likelihood" spec="beast.base.inference.CompoundDistribution">
 	            <!--
                 <distribution idref="treeLikelihood.XY"/>
                 -->
@@ -189,7 +189,7 @@ name="alignment">
             <log idref="prior"/>
             <log idref="treeLikelihood.XY"/>
             <log idref="treeLikelihood.Y"/>
-            <log id="TreeHeight.t:big2_barcs" spec="beast.evolution.tree.TreeHeightLogger" tree="@Tree.t:big2_barcs"/>
+            <log id="TreeHeight.t:big2_barcs" spec="beast.base.evolution.tree.TreeHeightLogger" tree="@Tree.t:big2_barcs"/>
             <log idref="YuleModel.t:big2_barcs"/>
             <log idref="birthRate.t:big2_barcs"/>
             <log idref="AGRate"/>
@@ -203,7 +203,7 @@ name="alignment">
         </logger>
         
         <logger id="treelog.t:big2_barcs" spec="Logger" fileName="$(filebase).trees" logEvery="5000" mode="tree">
-            <log id="TreeWithMetaDataLogger.t:big2_barcs" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@Tree.t:big2_barcs"/>
+            <log id="TreeWithMetaDataLogger.t:big2_barcs" spec="beast.base.evolution.TreeWithMetaDataLogger" tree="@Tree.t:big2_barcs"/>
         </logger>
         
         <operatorschedule id="OperatorSchedule" spec="OperatorSchedule"/>

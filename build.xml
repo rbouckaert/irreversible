@@ -19,7 +19,8 @@
 	<property name="beast2classpath" location="${beast2path}/build" />
 	<property name="Add_on_dir" value="${release_dir}/add-on" />
 	<property name="Irreversibledir" value="."/>
-
+	<property name="beastappdir" location="../BeastFX/" />
+    <property name="beastappclasspath" location="${beastappdir}/build" />
 
     <import file="${beast2path}/build.xml" />
 
@@ -28,13 +29,14 @@
 
 	<path id="classpath">
         <pathelement path="${buildIrreversible}"/>
-		<fileset dir="${libBeast2}" includes="antlr-runtime-4.7.jar"/>	
-		<fileset dir="${libBeast2}" includes="junit-4.8.2.jar"/>
-		<fileset dir="${libBeast2}" includes="fest.jar"/>
+        <fileset dir="${libBeast2}/junit" includes="junit-platform-console-standalone-1.8.2.jar"/>
         <fileset dir="${libBeast2}" includes="beagle.jar"/>
-        <fileset dir="${libBeast2}" includes="jam.jar"/>
-        <fileset dir="${libBeast2}" includes="colt.jar"/>
+        <fileset dir="${libBeast2}" includes="antlr-runtime-4.10.1.jar"/>
+        <fileset dir="${libBeast2}" includes="beagle.jar"/> 
+        <fileset dir="${libBeast2}" includes="colt.jar"/> 
+        <fileset dir="${libBeast2}" includes="commons-math3-3.6.1.jar"/>
         <pathelement path="${beast2classpath}"/>
+        <pathelement path="${beastappclasspath}"/>
         <pathelement path="${BEASTLabsclasspath}"/>
 	</path>
 

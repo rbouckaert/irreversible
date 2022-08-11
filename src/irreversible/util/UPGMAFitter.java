@@ -1,24 +1,25 @@
 package irreversible.util;
 
+
 import java.io.File;
 import java.io.PrintStream;
 import java.util.List;
 
-import beast.app.util.Application;
-import beast.app.util.OutFile;
-import beast.app.util.TreeFile;
-import beast.core.Description;
-import beast.core.Input;
-import beast.core.Runnable;
-import beast.core.util.Log;
-import beast.evolution.alignment.Alignment;
-import beast.evolution.alignment.TaxonSet;
-import beast.evolution.tree.RNNIMetric;
-import beast.evolution.tree.RobinsonsFouldMetric;
-import beast.evolution.tree.Tree;
-import beast.evolution.tree.TreeMetric;
-import beast.util.ClusterTree;
-import beast.util.NexusParser;
+import beastfx.app.tools.Application;
+import beastfx.app.util.OutFile;
+import beastfx.app.util.TreeFile;
+import beast.base.core.Description;
+import beast.base.core.Input;
+import beast.base.inference.Runnable;
+import beast.base.core.Log;
+import beast.base.evolution.alignment.Alignment;
+import beast.base.evolution.alignment.TaxonSet;
+import beastlabs.evolution.tree.RNNIMetric;
+import beastlabs.evolution.tree.RobinsonsFouldMetric;
+import beast.base.evolution.tree.Tree;
+import beast.base.evolution.tree.TreeMetric;
+import beast.base.parser.NexusParser;
+
 
 
 @Description("Fits UPGMA tree to an alignemnt and ")
@@ -65,7 +66,7 @@ public class UPGMAFitter extends Runnable {
 			p2.parseFile(new File(fileName));
 			Alignment data = p2.m_alignment;
 			ClusterTree upgmaTree = new ClusterTree();
-			upgmaTree.initByName("taxa", data, "clusterType", "upgma");
+			upgmaTree.initByName("taxa", data, "clusterType", "irreversible");
 			
 			TreeMetric metric = new RNNIMetric(taxonset);
 			double RNNIDistance = metric.distance(trees.get(i+1), upgmaTree);

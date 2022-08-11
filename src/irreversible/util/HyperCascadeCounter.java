@@ -2,11 +2,11 @@ package irreversible.util;
 
 import java.util.*;
 
-import beast.app.util.Application;
-import beast.core.Description;
-import beast.core.Input;
-import beast.core.Runnable;
-import beast.core.util.Log;
+import beastfx.app.tools.Application;
+import beast.base.core.Description;
+import beast.base.core.Input;
+import beast.base.inference.Runnable;
+import beast.base.core.Log;
 
 
 /*

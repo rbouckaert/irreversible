@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import beast.core.Description;
-import beast.core.Input;
-import beast.evolution.datatype.DataType;
+import beast.base.core.Description;
+import beast.base.core.Input;
+import beast.base.evolution.datatype.DataType;
 import irreversible.util.HyperCascadeCounter;
 
 

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><beast beautitemplate='Standard' beautistatus='' namespace="beast.core:beast.evolution.alignment:beast.evolution.tree.coalescent:beast.core.util:beast.evolution.nuc:beast.evolution.operators:beast.evolution.sitemodel:beast.evolution.substitutionmodel:beast.evolution.likelihood" required="" version="2.6">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><beast beautitemplate='Standard' beautistatus='' namespace="beast.base.inference.operator.kernel:orc:beast.pkgmgmt:beast.base.core:beast.base.inference:beast.base.evolution.alignment:beast.base.evolution.tree.coalescent:beast.base.util:beast.base.math:beast.evolution.nuc:beast.base.evolution.operator:beast.base.inference.operator:beast.base.evolution.sitemodel:beast.base.evolution.substitutionmodel:beast.base.evolution.likelihood" required="" version="2.6">
     <data
 id="big2_barcs"
 spec="Alignment"
@@ -42,19 +42,19 @@ name="alignment">
     
 
 
-    <map name="Uniform" >beast.math.distributions.Uniform</map>
-    <map name="Exponential" >beast.math.distributions.Exponential</map>
-    <map name="LogNormal" >beast.math.distributions.LogNormalDistributionModel</map>
-    <map name="Normal" >beast.math.distributions.Normal</map>
-    <map name="Beta" >beast.math.distributions.Beta</map>
-    <map name="Gamma" >beast.math.distributions.Gamma</map>
-    <map name="LaplaceDistribution" >beast.math.distributions.LaplaceDistribution</map>
-    <map name="prior" >beast.math.distributions.Prior</map>
-    <map name="InverseGamma" >beast.math.distributions.InverseGamma</map>
-    <map name="OneOnX" >beast.math.distributions.OneOnX</map>
+    <map name="Uniform" >beast.base.inference.distribution.Uniform</map>
+    <map name="Exponential" >beast.base.inference.distribution.Exponential</map>
+    <map name="LogNormal" >beast.base.inference.distribution.LogNormalDistributionModel</map>
+    <map name="Normal" >beast.base.inference.distribution.Normal</map>
+    <map name="Beta" >beast.base.inference.distribution.Beta</map>
+    <map name="Gamma" >beast.base.inference.distribution.Gamma</map>
+    <map name="LaplaceDistribution" >beast.base.inference.distribution.LaplaceDistribution</map>
+    <map name="prior" >beast.base.inference.distribution.Prior</map>
+    <map name="InverseGamma" >beast.base.inference.distribution.InverseGamma</map>
+    <map name="OneOnX" >beast.base.inference.distribution.OneOnX</map>
     <run id="mcmc" spec="MCMC" chainLength="1000000">
         <state id="state" spec="State" storeEvery="5000">
-            <tree id="Tree.t:big2_barcs" spec="beast.evolution.tree.Tree" name="stateNode">
+            <tree id="Tree.t:big2_barcs" spec="beast.base.evolution.tree.Tree" name="stateNode">
                 <taxonset id="TaxonSet.big2_barcs" spec="TaxonSet">
                     <alignment idref="big2_barcs"/>
                 </taxonset>
@@ -66,14 +66,14 @@ name="alignment">
             <parameter id="ORCRates.c:big2_barcs" spec="parameter.RealParameter" dimension="66" lower="0.0" name="stateNode">0.5</parameter>
             <parameter id="freqParameter.s:big2_barcs" spec="parameter.RealParameter" dimension="4" lower="0.0" name="stateNode" upper="1.0">0.25</parameter>
         </state>
-        <init id="RandomTree.t:big2_barcs" spec="beast.evolution.tree.RandomTree" estimate="false" initial="@Tree.t:big2_barcs" taxa="@big2_barcs">
+        <init id="RandomTree.t:big2_barcs" spec="beast.base.evolution.tree.coalescent.RandomTree" estimate="false" initial="@Tree.t:big2_barcs" taxa="@big2_barcs">
             <populationModel id="ConstantPopulation0.t:big2_barcs" spec="ConstantPopulation">
                 <parameter id="randomPopSize.t:big2_barcs" spec="parameter.RealParameter" name="popSize">1.0</parameter>
             </populationModel>
         </init>
-        <distribution id="posterior" spec="util.CompoundDistribution">
-            <distribution id="prior" spec="util.CompoundDistribution">
-                <distribution id="YuleModel.t:big2_barcs" spec="beast.evolution.speciation.YuleModel" birthDiffRate="@birthRate.t:big2_barcs" tree="@Tree.t:big2_barcs"/>
+        <distribution id="posterior" spec="beast.base.inference.CompoundDistribution">
+            <distribution id="prior" spec="beast.base.inference.CompoundDistribution">
+                <distribution id="YuleModel.t:big2_barcs" spec="beast.base.evolution.speciation.YuleModel" birthDiffRate="@birthRate.t:big2_barcs" tree="@Tree.t:big2_barcs"/>
                 <prior id="ORCRatePriorDistribution.c:big2_barcs" name="distribution" x="@ORCRates.c:big2_barcs">
                     <LogNormal id="LogNormalDistributionModel.2" S="@ORCsigma.c:big2_barcs" meanInRealSpace="true" name="distr">
                         <parameter id="RealParameter.12" spec="parameter.RealParameter" estimate="false" name="M">1.0</parameter>
@@ -106,7 +106,7 @@ name="alignment">
                     </LogNormal>
                 </prior>
             </distribution>
-            <distribution id="likelihood" spec="util.CompoundDistribution" useThreads="true">
+            <distribution id="likelihood" spec="beast.base.inference.CompoundDistribution" useThreads="true">
                 <distribution id="treeLikelihood.big2_barcs" spec="ThreadedTreeLikelihood" data="@big2_barcs" tree="@Tree.t:big2_barcs">
                     <siteModel id="SiteModel.s:big2_barcs" spec="SiteModel" gammaCategoryCount="4" shape="@gammaShape.s:big2_barcs">
                         <parameter id="mutationRate.s:big2_barcs" spec="parameter.RealParameter" estimate="false" name="mutationRate">1.0</parameter>
@@ -115,7 +115,7 @@ name="alignment">
                             <frequencies id="estimatedFreqs.s:big2_barcs" spec="Frequencies" frequencies="@freqParameter.s:big2_barcs"/>
                         </substModel>
                     </siteModel>
-                    <branchRateModel id="OptimisedRelaxedClock.c:big2_barcs" spec="beast.evolution.branchratemodel.UCRelaxedClockModel" rates="@ORCRates.c:big2_barcs" tree="@Tree.t:big2_barcs">
+                    <branchRateModel id="OptimisedRelaxedClock.c:big2_barcs" spec="beast.base.evolution.branchratemodel.UCRelaxedClockModel" rates="@ORCRates.c:big2_barcs" tree="@Tree.t:big2_barcs">
                         <LogNormal id="ORCLogNormalDistributionModel.c:big2_barcs" S="@ORCsigma.c:big2_barcs" meanInRealSpace="true" name="distr">
                             <parameter id="RealParameter.11" spec="parameter.RealParameter" estimate="false" name="M">1.0</parameter>
                         </LogNormal>
@@ -134,20 +134,20 @@ name="alignment">
         <operator id="YuleModelWilsonBalding.t:big2_barcs" spec="WilsonBalding" tree="@Tree.t:big2_barcs" weight="3.0"/>
         <operator id="KappaScaler.s:big2_barcs" spec="ScaleOperator" parameter="@kappa.s:big2_barcs" scaleFactor="0.5" weight="0.1"/>
         <operator id="gammaShapeScaler.s:big2_barcs" spec="ScaleOperator" parameter="@gammaShape.s:big2_barcs" scaleFactor="0.5" weight="0.1"/>
-        <operator id="ORCAdaptableOperatorSampler_sigma.c:big2_barcs" spec="orc.operators.AdaptableOperatorSampler" weight="3.0">
+        <operator id="ORCAdaptableOperatorSampler_sigma.c:big2_barcs" spec="beast.base.evolution.operator.AdaptableOperatorSampler" weight="3.0">
             <parameter idref="ORCsigma.c:big2_barcs"/>
             <operator id="ORCucldStdevScaler.c:big2_barcs" spec="consoperators.UcldScalerOperator" distr="@ORCLogNormalDistributionModel.c:big2_barcs" rates="@ORCRates.c:big2_barcs" scaleFactor="0.5" stdev="@ORCsigma.c:big2_barcs" weight="1.0">
                 <kernel id="KernelDistribution$Bactrian.3" spec="KernelDistribution$Bactrian"/>
             </operator>
-            <operator id="ORCUcldStdevRandomWalk.c:big2_barcs" spec="BactrianRandomWalkOperator" parameter="@ORCsigma.c:big2_barcs" scaleFactor="0.1" weight="1.0">
+            <operator id="ORCUcldStdevRandomWalk.c:big2_barcs" spec="beast.base.inference.operator.kernel.BactrianRandomWalkOperator" parameter="@ORCsigma.c:big2_barcs" scaleFactor="0.1" weight="1.0">
                 <kernelDistribution id="KernelDistribution$Bactrian.4" spec="KernelDistribution$Bactrian"/>
             </operator>
-            <operator id="ORCUcldStdevScale.c:big2_barcs" spec="BactrianScaleOperator" parameter="@ORCsigma.c:big2_barcs" scaleFactor="0.5" upper="10.0" weight="1.0">
+            <operator id="ORCUcldStdevScale.c:big2_barcs" spec="beast.base.evolution.operator.kernel.BactrianScaleOperator" parameter="@ORCsigma.c:big2_barcs" scaleFactor="0.5" upper="10.0" weight="1.0">
                 <kernelDistribution id="KernelDistribution$Bactrian.5" spec="KernelDistribution$Bactrian"/>
             </operator>
             <operator id="ORCSampleFromPriorOperator_sigma.c:big2_barcs" spec="orc.operators.SampleFromPriorOperator" parameter="@ORCsigma.c:big2_barcs" prior2="@ORCsigmaPrior.c:big2_barcs" weight="1.0"/>
         </operator>
-        <operator id="ORCAdaptableOperatorSampler_rates_root.c:big2_barcs" spec="orc.operators.AdaptableOperatorSampler" weight="1.0">
+        <operator id="ORCAdaptableOperatorSampler_rates_root.c:big2_barcs" spec="beast.base.evolution.operator.AdaptableOperatorSampler" weight="1.0">
             <parameter idref="ORCRates.c:big2_barcs"/>
             <tree idref="Tree.t:big2_barcs"/>
             <operator id="ORCRootOperator1.c:big2_barcs" spec="consoperators.SimpleDistance" clockModel="@OptimisedRelaxedClock.c:big2_barcs" rates="@ORCRates.c:big2_barcs" tree="@Tree.t:big2_barcs" twindowSize="0.005" weight="1.0">
@@ -157,25 +157,25 @@ name="alignment">
                 <kernel id="KernelDistribution$Bactrian.7" spec="KernelDistribution$Bactrian"/>
             </operator>
         </operator>
-        <operator id="ORCAdaptableOperatorSampler_rates_internal.c:big2_barcs" spec="orc.operators.AdaptableOperatorSampler" weight="20.0">
+        <operator id="ORCAdaptableOperatorSampler_rates_internal.c:big2_barcs" spec="beast.base.evolution.operator.AdaptableOperatorSampler" weight="20.0">
             <parameter idref="ORCRates.c:big2_barcs"/>
             <tree idref="Tree.t:big2_barcs"/>
             <operator id="ORCInternalnodesOperator.c:big2_barcs" spec="consoperators.InConstantDistanceOperator" clockModel="@OptimisedRelaxedClock.c:big2_barcs" rates="@ORCRates.c:big2_barcs" tree="@Tree.t:big2_barcs" twindowSize="0.005" weight="1.0">
                 <kernel id="KernelDistribution$Bactrian.8" spec="KernelDistribution$Bactrian"/>
             </operator>
-            <operator id="ORCRatesRandomWalk.c:big2_barcs" spec="BactrianRandomWalkOperator" parameter="@ORCRates.c:big2_barcs" scaleFactor="0.1" weight="1.0">
+            <operator id="ORCRatesRandomWalk.c:big2_barcs" spec="beast.base.inference.operator.kernel.BactrianRandomWalkOperator" parameter="@ORCRates.c:big2_barcs" scaleFactor="0.1" weight="1.0">
                 <kernelDistribution id="KernelDistribution$Bactrian.9" spec="KernelDistribution$Bactrian"/>
             </operator>
-            <operator id="ORCRatesScale.c:big2_barcs" spec="BactrianScaleOperator" parameter="@ORCRates.c:big2_barcs" scaleFactor="0.5" upper="10.0" weight="1.0">
+            <operator id="ORCRatesScale.c:big2_barcs" spec="beast.base.evolution.operator.kernel.BactrianScaleOperator" parameter="@ORCRates.c:big2_barcs" scaleFactor="0.5" upper="10.0" weight="1.0">
                 <kernelDistribution id="KernelDistribution$Bactrian.10" spec="KernelDistribution$Bactrian"/>
             </operator>
             <operator id="ORCSampleFromPriorOperator.rates.c:big2_barcs" spec="orc.operators.SampleFromPriorOperator" parameter="@ORCRates.c:big2_barcs" prior2="@ORCRatePriorDistribution.c:big2_barcs" weight="1.0"/>
         </operator>
-        <operator id="ORCAdaptableOperatorSampler_NER.c:big2_barcs" spec="orc.operators.AdaptableOperatorSampler" weight="15.0">
+        <operator id="ORCAdaptableOperatorSampler_NER.c:big2_barcs" spec="beast.base.evolution.operator.AdaptableOperatorSampler" weight="15.0">
             <tree idref="Tree.t:big2_barcs"/>
             <operator id="ORCNER_null.c:big2_barcs" spec="Exchange" tree="@Tree.t:big2_barcs" weight="0.0"/>
             <operator id="ORCNER_dAE_dBE_dCE.c:big2_barcs" spec="orc.ner.NEROperator_dAE_dBE_dCE" rates="@ORCRates.c:big2_barcs" tree="@Tree.t:big2_barcs" weight="1.0"/>
-            <metric id="RobinsonsFouldMetric.0" spec="beast.evolution.tree.RobinsonsFouldMetric" taxonset="@TaxonSet.big2_barcs"/>
+            <metric id="RobinsonsFouldMetric.0" spec="beastlabs.evolution.tree.RobinsonsFouldMetric" taxonset="@TaxonSet.big2_barcs"/>
         </operator>
         <operator id="FrequenciesExchanger.s:big2_barcs" spec="DeltaExchangeOperator" delta="0.01" weight="0.1">
             <parameter idref="freqParameter.s:big2_barcs"/>
@@ -185,13 +185,13 @@ name="alignment">
             <log idref="likelihood"/>
             <log idref="prior"/>
             <log idref="treeLikelihood.big2_barcs"/>
-            <log id="TreeHeight.t:big2_barcs" spec="beast.evolution.tree.TreeHeightLogger" tree="@Tree.t:big2_barcs"/>
+            <log id="TreeHeight.t:big2_barcs" spec="beast.base.evolution.tree.TreeHeightLogger" tree="@Tree.t:big2_barcs"/>
             <log idref="YuleModel.t:big2_barcs"/>
             <log idref="birthRate.t:big2_barcs"/>
             <log idref="kappa.s:big2_barcs"/>
             <log idref="gammaShape.s:big2_barcs"/>
             <log idref="ORCsigma.c:big2_barcs"/>
-            <log id="ORCRatesStat.c:big2_barcs" spec="beast.evolution.branchratemodel.RateStatistic" branchratemodel="@OptimisedRelaxedClock.c:big2_barcs" tree="@Tree.t:big2_barcs"/>
+            <log id="ORCRatesStat.c:big2_barcs" spec="beast.base.evolution.RateStatistic" branchratemodel="@OptimisedRelaxedClock.c:big2_barcs" tree="@Tree.t:big2_barcs"/>
             <log idref="freqParameter.s:big2_barcs"/>
         </logger>
         <logger id="screenlog" spec="Logger" logEvery="10000">
@@ -200,7 +200,7 @@ name="alignment">
             <log idref="prior"/>
         </logger>
         <logger id="treelog.t:big2_barcs" spec="Logger" fileName="$(filebase).trees" logEvery="1000" mode="tree">
-            <log id="TreeWithMetaDataLogger.t:big2_barcs" spec="beast.evolution.tree.TreeWithMetaDataLogger" branchratemodel="@OptimisedRelaxedClock.c:big2_barcs" tree="@Tree.t:big2_barcs"/>
+            <log id="TreeWithMetaDataLogger.t:big2_barcs" spec="beast.base.evolution.TreeWithMetaDataLogger" branchratemodel="@OptimisedRelaxedClock.c:big2_barcs" tree="@Tree.t:big2_barcs"/>
         </logger>
         <operatorschedule id="OperatorSchedule" spec="OperatorSchedule"/>
     </run>

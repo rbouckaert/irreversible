@@ -3,10 +3,10 @@ package irreversible.substmodel;
 
 import java.util.*;
 
-import beast.core.Description;
-import beast.core.Input;
-import beast.core.Input.Validate;
-import beast.evolution.alignment.Alignment;
+import beast.base.core.Description;
+import beast.base.core.Input;
+import beast.base.core.Input.Validate;
+import beast.base.evolution.alignment.Alignment;
 
 @Description("Class representing hyper cascade alignment data for triplets a_{i}a_{i+1}b_{i}.")
 public class HyperCascadeAlignmentForTriplets extends Alignment {
