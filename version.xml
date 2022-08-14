@@ -17,6 +17,7 @@
         <provider classname="irreversible.util.ClusterTree"/>
         <provider classname="irreversible.util.HyperCascadeCounter"/>
         <provider classname="irreversible.util.UPGMAFitter"/>
+        <provider classname="irreversible.branchratemodel.DecreasingRateClockModel"/>
     </service>
 
     <service type="beast.base.evolution.datatype.DataType">
