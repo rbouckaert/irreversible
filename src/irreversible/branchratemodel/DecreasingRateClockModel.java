@@ -16,7 +16,7 @@ public class DecreasingRateClockModel extends Base {
 	public enum interpolation {linear, midexp, integratedexp}
     final public Input<TreeInterface> treeInput = new Input<>("tree", "phylogenetic beast.tree with sequence data in the leafs", Validate.REQUIRED);
     final public Input<Alignment> dataInput = new Input<>("data", "sequence data for the beast.tree");
-    final public Input<Double> endRateInput = new Input<>("endRate", "if specified, use this value as target rate", 0.06666666);
+    final public Input<Function> endRateInput = new Input<>("endRate", "if specified, use this value as target rate, unless data is specified, then endRate is ignored");
     
     final public Input<interpolation> interpolationInput = new Input<>("interpolation", "interpolation mode: "
     		+ "linear = use linear interpolation (where midpoint equals integral) "
@@ -27,11 +27,13 @@ public class DecreasingRateClockModel extends Base {
     private Function meanRate;
     private double endRate, logU;
     private interpolation mode;
+    private Function endRateFunction;
     
 	@Override
 	public void initAndValidate() {
 		tree = treeInput.get();
 		meanRate = meanRateInput.get();
+		endRateFunction = endRateInput.get();
 		
 		if (dataInput.get() != null) {
 			// determine fraction of not mutated sites
@@ -43,7 +45,7 @@ public class DecreasingRateClockModel extends Base {
 			endRate = freqs[0] + 0.5*freqs[1]+0.5*freqs[2];
 			endRate = freqs[0];
 		} else {
-			endRate = endRateInput.get();
+			endRate = endRateInput.get().getArrayValue();
 		}
 		logU = Math.log(endRate);
 		
@@ -58,6 +60,9 @@ public class DecreasingRateClockModel extends Base {
 		if (node.isRoot()) {
 			return meanRate.getArrayValue();
 		}
+		if (dataInput.get() != null) {
+			endRate = endRateFunction.getArrayValue();
+		}		
 		double rootHeight = tree.getRoot().getHeight();
 		double parentHeight = node.getParent().getHeight();
 		double nodeHeight = node.getHeight();

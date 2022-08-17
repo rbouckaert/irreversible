@@ -5,7 +5,7 @@ import beast.base.core.Input;
 import beast.base.core.Input.Validate;
 import beast.base.inference.parameter.RealParameter;
 import beast.base.evolution.datatype.DataType;
-import beastlabs.evolution.substitutionmodel.ComplexSubstitutionModel;
+import beast.base.evolution.substitutionmodel.ComplexSubstitutionModel;
 
 @Description("Irreversible substitution model to handle bigMEMOIR data."
 		+ "It assumes a 4 state model, where the first state represents AA "
