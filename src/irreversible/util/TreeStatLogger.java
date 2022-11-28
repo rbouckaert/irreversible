@@ -1,0 +1,97 @@
+package irreversible.util;
+
+
+
+import java.io.PrintStream;
+
+import beast.base.core.Description;
+import beast.base.core.Function;
+import beast.base.core.Input;
+import beast.base.core.Log;
+import beast.base.core.Loggable;
+import beast.base.evolution.tree.Node;
+import beast.base.evolution.tree.Tree;
+import beast.base.core.Input.Validate;
+import beast.base.inference.CalculationNode;
+
+
+@Description("Logger to report statistics of a tree after removing the root node")
+public class TreeStatLogger extends CalculationNode implements Loggable, Function {
+    final public Input<Tree> treeInput = new Input<>("tree", "tree to report height for.", Validate.REQUIRED);
+    final public Input<Boolean> logHeightInput = new Input<>("logHeight", "If true, tree height will be logged.", true);
+    final public Input<Boolean> logLengthInput = new Input<>("logLength", "If true, tree length will be logged.", true);
+
+    boolean logHeight, logLength;
+
+    @Override
+    public void initAndValidate() {
+
+        // This confusing line is because the default situation is to log
+        // the tree height: we want the height to be logged only if neither of
+        // these defaults is altered.
+        logHeight = logHeightInput.get();
+        logLength = logLengthInput.get();
+
+    	if (!logHeight && !logLength) {
+    		Log.warning.println("TreeStatLogger " + getID() + "logs nothing. Set logHeight=true or logLength=true to log at least something");
+    	}
+    }
+
+    @Override
+    public void init(PrintStream out) {
+        final Tree tree = treeInput.get();
+        if (logHeight) {
+            out.print(tree.getID() + ".height\t");
+        }
+        if (logLength) {
+            out.print(tree.getID() + ".treeLength\t");
+        }
+    }
+
+    @Override
+    public void log(long sample, PrintStream out) {
+        final Tree tree = treeInput.get();
+        if (logHeight) {
+        	double rootHeight = Math.min(tree.getRoot().getLeft().getHeight(), tree.getRoot().getRight().getHeight());
+        	out.print(rootHeight + "\t");
+        }
+        if (logLength) {
+            out.print(getLength(tree) + "\t");
+        }
+    }
+
+    private double getLength(Tree tree) {
+    	double length = 0;
+    	for (Node node : tree.getNodesAsArray()) {
+    		if (!node.isRoot()) {
+    			length += node.getLength();
+    		}
+    	}
+    	length -= tree.getRoot().getLeft().getLength();
+    	length -= tree.getRoot().getRight().getLength();
+		return length;
+	}
+
+	@Override
+    public void close(PrintStream out) {
+        // nothing to do
+    }
+
+    @Override
+    public int getDimension() {
+        return 2;
+    }
+
+    @Override
+    public double getArrayValue() {
+        return treeInput.get().getRoot().getHeight();
+    }
+
+    @Override
+    public double getArrayValue(int dim) {
+    	if (dim == 0) {
+    		return treeInput.get().getRoot().getHeight();
+    	}
+    	return getLength(treeInput.get());
+    }
+}
