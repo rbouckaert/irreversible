@@ -9,6 +9,7 @@
         <provider classname="irreversible.substmodel.BigMEMOIR2"/>
         <provider classname="irreversible.substmodel.PureBirthModel"/>
         <provider classname="irreversible.substmodel.ConditionedOnDistribution"/>
+        <provider classname="irreversible.substmodel.PowerDistribution"/>
         <provider classname="irreversible.substmodel.HyperCascadeAlignmentForQuintuplets"/>
         <provider classname="irreversible.substmodel.HyperCascadeAlignmentForTriplets"/>
         <provider classname="irreversible.substmodel.HyperCascadeAlignmentL12"/>
