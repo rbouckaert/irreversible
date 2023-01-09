@@ -87,6 +87,7 @@
             </plate>
         </distribution>
     </distribution>
+    
     <operator id="YuleBirthRateScaler.t:dna" spec="beast.base.evolution.operator.kernel.BactrianScaleOperator" parameter="@birthRate.t:dna" weight="3.0"/>
     <operator id="YuleModelTreeScaler.t:dna" spec="beast.base.evolution.operator.kernel.BactrianScaleOperator" scaleFactor="0.5" tree="@Tree.t:dna" weight="3.0"/>
     <operator id="YuleModelTreeRootScaler.t:dna" spec="beast.base.evolution.operator.kernel.BactrianScaleOperator" rootOnly="true" scaleFactor="0.1" tree="@Tree.t:dna" weight="3.0"/>
@@ -119,14 +120,6 @@
             <log idref="clockRate.c:dna$(n)"/>
             <log idref="gammaShape.s:dna$(n)"/>
         </plate>
-
-        <log id="RNNITreeDistance" spec="beastlabs.evolution.tree.TreeDistanceLogger">
-		  <tree idref="Tree.t:dna"/>
-          <ref spec="beast.base.evolution.tree.TreeParser" id='trueTree' IsLabelledNewick='true' newick="$(tree)" taxonset="@TaxonSet.dna"/>
-	    </log>
-	    <log id="RFTreeDistance" spec="beastlabs.evolution.tree.TreeDistanceLogger" tree="@Tree.t:dna" metric="RF">
-            <ref idref="trueTree"/>
-        </log>
     </logger>
 
     <logger id="screenlog" spec="Logger" logEvery="100000">
