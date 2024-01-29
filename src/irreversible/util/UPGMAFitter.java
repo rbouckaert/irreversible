@@ -16,6 +16,7 @@ import beast.base.evolution.alignment.Alignment;
 import beast.base.evolution.alignment.TaxonSet;
 import beastlabs.evolution.tree.RNNIMetric;
 import beastlabs.evolution.tree.RobinsonsFouldMetric;
+import beast.base.evolution.tree.ClusterTree;
 import beast.base.evolution.tree.Tree;
 import beast.base.evolution.tree.TreeMetric;
 import beast.base.parser.NexusParser;
