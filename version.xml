@@ -16,6 +16,7 @@
         <provider classname="irreversible.substmodel.HyperCascadeDataTypeQuintuplet"/>
         <provider classname="irreversible.substmodel.HyperCascadeDataTypeTriplet"/>
         <provider classname="irreversible.substmodel.HyperCascadeSubstModel"/>
+        <provider classname="irreversible.substmodel.HyperCascadeSubstModelWithDeletions"/>
         <provider classname="irreversible.substmodel.HyperCascadeSubstModelForQuintuples"/>
         <provider classname="irreversible.util.ClusterTree"/>
         <provider classname="irreversible.util.HyperCascadeCounter"/>
